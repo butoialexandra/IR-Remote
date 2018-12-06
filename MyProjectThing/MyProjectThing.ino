@@ -11,6 +11,7 @@
 #define GREEN    0x07E0
 #define WHITE    0xFFFF
 #define BLACK    0x0000
+#define CYAN     0x07FF
 
 int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
@@ -85,12 +86,14 @@ void setup() {
 // draw 0-9 buttons
 void drawButtons() {
   // make black screen
-  tft.fillScreen(HX8357_BLACK);
-  tft.drawLine(0,0,319,0,HX8357_WHITE);
-  tft.drawLine(319,0,319,479,HX8357_WHITE);
-  tft.drawLine(319,479,0,479,HX8357_WHITE);
-  tft.drawLine(0,479,0,0,HX8357_WHITE);
- 
+  tft.fillScreen(BLACK);
+  tft.drawLine(0,0,319,0,WHITE);
+  tft.drawLine(319,0,319,479,WHITE);
+  tft.drawLine(319,479,0,479,WHITE);
+  tft.drawLine(0,479,0,0,WHITE);
+
+  // Digit buttons
+  
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
       char buttonNo = '0' + 3 * j + i + 1;
@@ -100,8 +103,74 @@ void drawButtons() {
       tft.drawChar(x - 12, y - 16, buttonNo, BLACK, GREEN, 5);
     }    
   }
-  tft.fillCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 5 * 4, 28, RED);
-  tft.drawChar(SCREEN_WIDTH / 2 - 12, SCREEN_HEIGHT / 5 * 4 - 16, '0', BLACK, RED, 5);
+  // ZERO
+  tft.fillCircle(SCREEN_WIDTH / 4 * 2, SCREEN_HEIGHT / 5 * 4, 28, GREEN);
+  tft.drawChar(SCREEN_WIDTH / 4 * 2 - 12, SCREEN_HEIGHT / 5 * 4 - 16, '0', BLACK, GREEN, 5);
+  
+  /*
+  // POWER BUTTON
+  tft.fillCircle(SCREEN_WIDTH / 5 * 4, SCREEN_HEIGHT / 8, 28, RED);
+
+  
+  // MENU
+  int pos_x = SCREEN_WIDTH / 5;
+  int pos_y = SCREEN_HEIGHT / 8 * 6;
+  
+  // < Button
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.fillTriangle(pos_x + 26, pos_y + 20, pos_x + 26, pos_y + 30, pos_x + 20, pos_y + 25, BLACK);
+  // v Button
+  pos_x = SCREEN_WIDTH / 5 * 2;
+  pos_y = SCREEN_HEIGHT / 8 * 7;
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.fillTriangle(pos_x + 20, pos_y + 26, pos_x + 30, pos_y + 26, pos_x + 25, pos_y + 32, BLACK);
+  // Enter
+  pos_x = SCREEN_WIDTH / 5 * 2;
+  pos_y = SCREEN_HEIGHT / 8 * 6;
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, RED);
+  // > Button
+  pos_x = SCREEN_WIDTH / 5 * 3;
+  pos_y = SCREEN_HEIGHT / 8 * 6;
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.fillTriangle(pos_x + 26, pos_y + 20, pos_x + 26, pos_y + 30, pos_x + 32, pos_y + 25, BLACK);
+  // ^ Button
+  pos_x = SCREEN_WIDTH / 5 * 2;
+  pos_y = SCREEN_HEIGHT / 8 * 5;
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.fillTriangle(pos_x + 20, pos_y + 26, pos_x + 30, pos_y + 26, pos_x + 25, pos_y + 20, BLACK);
+  */
+
+  /*
+  int pos_x = SCREEN_WIDTH / 2- 26;
+  int pos_y = SCREEN_HEIGHT / 2;
+
+  // Volume +
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.drawChar(pos_x + 12, pos_y + 12, '+', BLACK, WHITE, 5);
+
+  pos_y += 56;
+
+  // Volume -
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.drawChar(pos_x + 12, pos_y + 12, '-', BLACK, WHITE, 5);
+
+  pos_x -= 56;
+  pos_y -= 28;
+
+  // Channel <
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.drawChar(pos_x + 12, pos_y + 10, '<', BLACK, WHITE, 5);
+
+  pos_x += 112;
+
+  // Channel >
+  tft.fillRoundRect(pos_x, pos_y, 52, 52, 8, WHITE);
+  tft.drawChar(pos_x + 12, pos_y + 10, '>', BLACK, WHITE, 5);
+  */
+
+  // GO TO NEXT PAGE BUTTON
+  tft.fillRoundRect(270, 420, 36, 52, 8, WHITE);
+  tft.drawChar(273, 428, '>', BLACK, WHITE, 5);
 }
 
 void loop() {
