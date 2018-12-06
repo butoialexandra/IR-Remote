@@ -17,7 +17,9 @@
 int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
 
-CircleButton *button;
+// declare array of digit buttons
+CircleButton *numbers [10];
+
 void setup() {
   Wire.setClock(100000); // higher rates trigger an IOExpander bug
   UNPHONE_DBG = true;
@@ -111,20 +113,17 @@ void drawButtons() {
       positions[buttonNo][1] = SCREEN_HEIGHT / 5 * (j + 1);
     }
    }
-   
-  // declare array of digit buttons
-  CircleButton *numbers [10];
 
-  numbers[0] = new CircleButton(positions[0][0], positions[0][1], 28, GREEN, '0', 0x1000809);
-  numbers[1] = new CircleButton(positions[1][0], positions[1][1], 28, GREEN, '1', 0x1000809);
-  numbers[2] = new CircleButton(positions[2][0], positions[2][1], 28, GREEN, '2', 0x1000809);
-  numbers[3] = new CircleButton(positions[3][0], positions[3][1], 28, GREEN, '3', 0x1000809);
-  numbers[4] = new CircleButton(positions[4][0], positions[4][1], 28, GREEN, '4', 0x1000809);
-  numbers[5] = new CircleButton(positions[5][0], positions[5][1], 28, GREEN, '5', 0x1000809);
-  numbers[6] = new CircleButton(positions[6][0], positions[6][1], 28, GREEN, '6', 0x1000809);
-  numbers[7] = new CircleButton(positions[7][0], positions[7][1], 28, GREEN, '7', 0x1000809);
-  numbers[8] = new CircleButton(positions[8][0], positions[8][1], 28, GREEN, '8', 0x1000809);
-  numbers[9] = new CircleButton(positions[9][0], positions[9][1], 28, GREEN, '9', 0x1000809);
+  numbers[0] = new CircleButton(positions[0][0], positions[0][1], GREEN, '0', 0x1000809);
+  numbers[1] = new CircleButton(positions[1][0], positions[1][1], GREEN, '1', 0x1000809);
+  numbers[2] = new CircleButton(positions[2][0], positions[2][1], GREEN, '2', 0x1000809);
+  numbers[3] = new CircleButton(positions[3][0], positions[3][1], GREEN, '3', 0x1000809);
+  numbers[4] = new CircleButton(positions[4][0], positions[4][1], GREEN, '4', 0x1000809);
+  numbers[5] = new CircleButton(positions[5][0], positions[5][1], GREEN, '5', 0x1000809);
+  numbers[6] = new CircleButton(positions[6][0], positions[6][1], GREEN, '6', 0x1000809);
+  numbers[7] = new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1000809);
+  numbers[8] = new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x1000809);
+  numbers[9] = new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1000809);
 
 
   // draw digit buttons
@@ -201,6 +200,17 @@ void drawButtons() {
 
 void loop() {
   bool usbPowerOn = checkPowerSwitch(); // shutdown if switch off
-  
+
+  if (ts.touched()) {
+      // retrieve a point
+      TS_Point p = ts.getPoint();
+      // scale the point from ~0->4000 to tft.width using the calibration #'s
+      p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
+      p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
+    
+      Serial.printf("x position = %s\n", p.x);
+      Serial.printf("y position = %s\n", p.y);
+  }
+
   //TestScreen::testSequence(usbPowerOn); // run a test on all modules
 }

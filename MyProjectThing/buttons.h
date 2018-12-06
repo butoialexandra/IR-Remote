@@ -33,15 +33,15 @@ class Button {
 
 class CircleButton: public Button {
   public:
-    int radius; // needs radius to draw the circle
+    const int radius = 28; // needs radius to draw the circle
     char label;
     void drawButton();
     void pressButton();
-    CircleButton(int x, int y, int r, uint16_t c, char l, unsigned long h)
+    bool isPressed(int x, int y);
+    CircleButton(int x, int y, uint16_t c, char l, unsigned long h)
     {
       xPos = x;
       yPos = y;
-      radius = r;
       colour = c;
       label = l;
       hexCode = h;
