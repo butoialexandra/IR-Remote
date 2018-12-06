@@ -5,6 +5,7 @@
 // TestScreen::activate(true); to false to change this behaviour.
 
 #include "unphone.h"
+#include "buttons.h"
 
 // Color definitions
 #define RED      0xF800
@@ -16,6 +17,7 @@
 int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
 
+CircleButton *button;
 void setup() {
   Wire.setClock(100000); // higher rates trigger an IOExpander bug
   UNPHONE_DBG = true;
@@ -79,6 +81,8 @@ void setup() {
   lmic_init();
   lmic_do_send(&sendjob);
 
+
+
   // draw 0-9 buttons
   drawButtons();
 }
@@ -92,17 +96,27 @@ void drawButtons() {
   tft.drawLine(319,479,0,479,WHITE);
   tft.drawLine(0,479,0,0,WHITE);
 
+  CircleButton *button = new CircleButton(50, 50, 28, GREEN, '1', 0x1000809);
+  button -> drawButton();
+
+
   // Digit buttons
+  //CircleButton *numbers [10];
+//   
+//  for (int i = 0; i < 3; i++) {
+//    for (int j = 0; j < 3; j++) {
+//      char buttonNo = 3 * j + i + 1;
+//      int x = SCREEN_WIDTH / 4 * (i + 1);
+//      int y = SCREEN_HEIGHT / 5 * (j + 1);
+//      numbers[buttonNo] = new CircleButton(x, y, 28, GREEN);
+//      button.drawButton();
+      
+      //tft.fillCircle(x, y, 28, GREEN);
+      //tft.drawChar(x - 12, y - 16, buttonNo, BLACK, GREEN, 5);
+ //   }    
+  //}
+
   
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      char buttonNo = '0' + 3 * j + i + 1;
-      int x = SCREEN_WIDTH / 4 * (i + 1);
-      int y = SCREEN_HEIGHT / 5 * (j + 1);
-      tft.fillCircle(x, y, 28, GREEN);
-      tft.drawChar(x - 12, y - 16, buttonNo, BLACK, GREEN, 5);
-    }    
-  }
   // ZERO
   tft.fillCircle(SCREEN_WIDTH / 4 * 2, SCREEN_HEIGHT / 5 * 4, 28, GREEN);
   tft.drawChar(SCREEN_WIDTH / 4 * 2 - 12, SCREEN_HEIGHT / 5 * 4 - 16, '0', BLACK, GREEN, 5);
