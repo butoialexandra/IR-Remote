@@ -8,6 +8,8 @@ void CircleButton::drawButton() {
 void CircleButton::pressButton() {
   IRsend irsend;
   irsend.sendPanasonic(PanasonicAddress, hexCode);
+  colour = RED;
+  this -> drawButton();
 }
 
 bool CircleButton::isPressed(int x, int y) {

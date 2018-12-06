@@ -208,8 +208,16 @@ void loop() {
       p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
       p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
     
-      Serial.printf("x position = %d\n", p.x);
-      Serial.printf("y position = %d\n", p.y);
+//      Serial.printf("x position = %d\n", p.x);
+//      Serial.printf("y position = %d\n", p.y);
+
+      // check if any button is pressed
+      for (int i = 0; i < 10; i++) {
+        if(numbers[i] -> isPressed(p.x, p.y)) {
+          numbers[i] -> pressButton();
+        }
+      }
+
   }
 
   //TestScreen::testSequence(usbPowerOn); // run a test on all modules
