@@ -1,4 +1,5 @@
 #include "buttons.h"
+#include "math.h"
 
 void CircleButton::drawButton() {
   tft.fillCircle(xPos, yPos, radius, colour);
@@ -13,7 +14,12 @@ void CircleButton::pressButton() {
 }
 
 bool CircleButton::isPressed(int x, int y) {
-  return x < (xPos + radius) && x > (xPos - radius)
-      && y < (yPos + radius) && x > (yPos - radius);
+ return x < (xPos + radius) && x > (xPos - radius)
+     && y < (yPos + radius) && y > (yPos - radius);
 }
 
+//bool CircleButton::isPressed(int x, int y) {
+//  int squaredSums = (x-xPos)^2 + (y-yPos)^2; // must be int to avoid NaN error
+//  int squaredRadius = radius^2; // must be int also
+//  return squaredSums < squaredRadius;
+//}

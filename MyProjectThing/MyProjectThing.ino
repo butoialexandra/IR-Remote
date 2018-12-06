@@ -13,7 +13,11 @@
 #define WHITE    0xFFFF
 #define BLACK    0x0000
 #define CYAN     0x07FF
-
+#define TFT_DC   33
+#define TS_MINX 3800
+#define TS_MAXX 100
+#define TS_MINY 100
+#define TS_MAXY 3750
 int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
 
@@ -200,25 +204,20 @@ void drawButtons() {
 
 void loop() {
   bool usbPowerOn = checkPowerSwitch(); // shutdown if switch off
-
-  if (ts.touched()) {
       // retrieve a point
-      TS_Point p = ts.getPoint();
-      // scale the point from ~0->4000 to tft.width using the calibration #'s
-      p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
-      p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
-    
-//      Serial.printf("x position = %d\n", p.x);
-//      Serial.printf("y position = %d\n", p.y);
-
-      // check if any button is pressed
-      for (int i = 0; i < 10; i++) {
-        if(numbers[i] -> isPressed(p.x, p.y)) {
-          numbers[i] -> pressButton();
-        }
+  TS_Point p = ts.getPoint();
+  
+  // scale the point from ~0->4000 to tft.width using the calibration #'s
+  p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
+  p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
+  
+  // Button pressed
+  if (p.z > 10 && p.z < 50) {
+    for (int i = 0; i < 10; i++) {
+      if(numbers[i] -> isPressed(p.x, p.y)) {
+        numbers[i] -> pressButton();
+        Serial.println(i);
       }
-
+    }
   }
-
-  //TestScreen::testSequence(usbPowerOn); // run a test on all modules
 }
