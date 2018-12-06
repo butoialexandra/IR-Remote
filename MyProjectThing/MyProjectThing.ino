@@ -96,14 +96,12 @@ void drawButtons() {
   tft.drawLine(319,479,0,479,WHITE);
   tft.drawLine(0,479,0,0,WHITE);
 
-//  CircleButton *button = new CircleButton(50, 50, 28, GREEN, '1', 0x1000809);
-//  button -> drawButton();
-
+  // declare array of button positions
   int positions[10][2];
 
   // positions for 0 button
   positions[0][0] = SCREEN_WIDTH / 4 * 2;
-  positions[0][1] = SCREEN_WIDTH / 4 * 2;
+  positions[0][1] = SCREEN_HEIGHT / 5 * 4;
 
   // positions for 1-9 buttons
   for (int i = 0; i < 3; i++) {
@@ -114,7 +112,7 @@ void drawButtons() {
     }
    }
    
-  // Digit buttons
+  // declare array of digit buttons
   CircleButton *numbers [10];
 
   numbers[0] = new CircleButton(positions[0][0], positions[0][1], 28, GREEN, '0', 0x1000809);
@@ -128,25 +126,12 @@ void drawButtons() {
   numbers[8] = new CircleButton(positions[8][0], positions[8][1], 28, GREEN, '8', 0x1000809);
   numbers[9] = new CircleButton(positions[9][0], positions[9][1], 28, GREEN, '9', 0x1000809);
 
+
+  // draw digit buttons
   for (int i = 0; i < 10; i++) {
-    numbers[0] -> drawButton();
+    numbers[i] -> drawButton();
   }
   
-   
-//  for (int i = 0; i < 3; i++) {
-//    for (int j = 0; j < 3; j++) {
-//      char buttonNo = 3 * j + i + 1;
-//      int x = SCREEN_WIDTH / 4 * (i + 1);
-//      int y = SCREEN_HEIGHT / 5 * (j + 1);
-//      numbers[buttonNo] = new CircleButton(x, y, 28, GREEN);
-//      button.drawButton();
-//   }    
-//  }
-
-  
-//  // ZERO
-//  tft.fillCircle(SCREEN_WIDTH / 4 * 2, SCREEN_HEIGHT / 5 * 4, 28, GREEN);
-//  tft.drawChar(SCREEN_WIDTH / 4 * 2 - 12, SCREEN_HEIGHT / 5 * 4 - 16, , BLACK, GREEN, 5);
   
   /*
   // POWER BUTTON
