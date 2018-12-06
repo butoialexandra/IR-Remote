@@ -39,7 +39,7 @@ void setup() {
   // show initial test screen on the LCD
   IOExpander::digitalWrite(IOExpander::BACKLIGHT, LOW);
   tft.begin(HX8357D);
-  TestScreen::activate(true);
+  TestScreen::activate(false);
   TestScreen::init();
   IOExpander::digitalWrite(IOExpander::BACKLIGHT, HIGH);
 
@@ -208,8 +208,8 @@ void loop() {
       p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
       p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
     
-      Serial.printf("x position = %s\n", p.x);
-      Serial.printf("y position = %s\n", p.y);
+      Serial.printf("x position = %d\n", p.x);
+      Serial.printf("y position = %d\n", p.y);
   }
 
   //TestScreen::testSequence(usbPowerOn); // run a test on all modules
