@@ -118,16 +118,16 @@ void drawButtons() {
     }
    }
 
-  numbers[0] = new CircleButton(positions[0][0], positions[0][1], GREEN, '0', 0x1000809);
+  numbers[0] = new CircleButton(positions[0][0], positions[0][1], GREEN, '0', 0x1009899);
   numbers[1] = new CircleButton(positions[1][0], positions[1][1], GREEN, '1', 0x1000809);
-  numbers[2] = new CircleButton(positions[2][0], positions[2][1], GREEN, '2', 0x1000809);
-  numbers[3] = new CircleButton(positions[3][0], positions[3][1], GREEN, '3', 0x1000809);
-  numbers[4] = new CircleButton(positions[4][0], positions[4][1], GREEN, '4', 0x1000809);
-  numbers[5] = new CircleButton(positions[5][0], positions[5][1], GREEN, '5', 0x1000809);
-  numbers[6] = new CircleButton(positions[6][0], positions[6][1], GREEN, '6', 0x1000809);
-  numbers[7] = new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1000809);
-  numbers[8] = new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x1000809);
-  numbers[9] = new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1000809);
+  numbers[2] = new CircleButton(positions[2][0], positions[2][1], GREEN, '2', 0x1008889);
+  numbers[3] = new CircleButton(positions[3][0], positions[3][1], GREEN, '3', 0x1004849);
+  numbers[4] = new CircleButton(positions[4][0], positions[4][1], GREEN, '4', 0x100C8C9);
+  numbers[5] = new CircleButton(positions[5][0], positions[5][1], GREEN, '5', 0x1002829);
+  numbers[6] = new CircleButton(positions[6][0], positions[6][1], GREEN, '6', 0x100A8A9);
+  numbers[7] = new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1006869);
+  numbers[8] = new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x100E8E9);
+  numbers[9] = new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1001819);
 
 
   // draw digit buttons
@@ -202,22 +202,49 @@ void drawButtons() {
   tft.drawChar(273, 428, '>', BLACK, WHITE, 5);
 }
 
+unsigned long now = 0;           // millis
+unsigned long prevSigMillis = 0; // previous signal acceptance time
+unsigned long sincePrevSig = 0;  // time since previous signal acceptance
+uint16_t TIME_SENSITIVITY = 300; // 300 ms between touches
+bool firstTime = true;
+
 void loop() {
   bool usbPowerOn = checkPowerSwitch(); // shutdown if switch off
-      // retrieve a point
+
+  // Get the time
+  now = millis();
+  if(firstTime) {
+    sincePrevSig = TIME_SENSITIVITY + 1;
+  } else {
+    sincePrevSig = now - prevSigMillis;
+  }
+
+
+  // retrieve the touch point
   TS_Point p = ts.getPoint();
-  
-  // scale the point from ~0->4000 to tft.width using the calibration #'s
-  p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
-  p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
-  
-  // Button pressed
-  if (p.z > 10 && p.z < 50) {
-    for (int i = 0; i < 10; i++) {
-      if(numbers[i] -> isPressed(p.x, p.y)) {
-        numbers[i] -> pressButton();
-        Serial.println(i);
+
+  firstTime = false;
+
+  // only handle touches that are more than 300ms apart
+  if (sincePrevSig > TIME_SENSITIVITY) {
+    // scale the point from ~0->4000 to tft.width using the calibration #'s
+    p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
+    p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
+    
+    // if touch has enough pressure
+    if (p.z > 10 && p.z < 50) {
+      // check which button has been pressed
+      for (int i = 0; i < 10; i++) {
+        if(numbers[i] -> isPressed(p.x, p.y)) {
+          numbers[i] -> pressButton();
+          Serial.println(i);
+          delay(200); // wait for 200 ms before resetting the buttons state
+          numbers[i] -> resetButton();
+        }
       }
     }
+
+    // successful touch, update time
+    prevSigMillis = now;
   }
 }

@@ -1,6 +1,8 @@
 #include "buttons.h"
 #include "math.h"
 
+bool pressSuccess = false; // whether the button press has been successful
+
 void CircleButton::drawButton() {
   tft.fillCircle(xPos, yPos, radius, colour);
   tft.drawChar(xPos - 12, yPos - 16, label, BLACK, colour, 5);
@@ -16,6 +18,11 @@ void CircleButton::pressButton() {
 bool CircleButton::isPressed(int x, int y) {
  return x < (xPos + radius) && x > (xPos - radius)
      && y < (yPos + radius) && y > (yPos - radius);
+}
+
+void CircleButton::resetButton() {
+  colour = GREEN;
+  this -> drawButton();
 }
 
 //bool CircleButton::isPressed(int x, int y) {

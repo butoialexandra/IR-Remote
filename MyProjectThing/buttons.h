@@ -37,6 +37,7 @@ class CircleButton: public Button {
     char label;
     void drawButton();
     void pressButton();
+    void resetButton();
     double distanceFromCentre(int x, int y);
     bool isPressed(int x, int y);
     CircleButton(int x, int y, uint16_t c, char l, unsigned long h)
