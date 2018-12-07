@@ -50,13 +50,13 @@ bool CircleButton::isPressed(int x, int y) {
 }
 
 bool SquareButton::isPressed(int x, int y) {
- return x < (xPos + width) && x > xPos
-     && y < (yPos + height) && y > yPos;
+ return x < (xPos + width/2) && x > (xPos - width/2)
+     && y < (yPos + height/2) && y > (yPos - height/2);
 }
 
 bool TriangleButton::isPressed(int x, int y) {
- return x < (xPos + width) && x > xPos
-     && y < (yPos + height) && y > yPos;
+ return x < (xPos + width/2) && x > (xPos - width/2)
+     && y < (yPos + height/2) && y > (yPos - height/2);
 }
 
 void CircleButton::resetButton() {
