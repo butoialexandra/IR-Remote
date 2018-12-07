@@ -22,7 +22,8 @@ int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
 
 // declare array of digit buttons
-CircleButton *numbers [10];
+//CircleButton *numbers [10];
+TriangleButton *numbers [10];
 
 void setup() {
   Wire.setClock(100000); // higher rates trigger an IOExpander bug
@@ -118,16 +119,27 @@ void drawButtons() {
     }
    }
 
-  numbers[0] = new CircleButton(positions[0][0], positions[0][1], GREEN, '0', 0x1009899);
-  numbers[1] = new CircleButton(positions[1][0], positions[1][1], GREEN, '1', 0x1000809);
-  numbers[2] = new CircleButton(positions[2][0], positions[2][1], GREEN, '2', 0x1008889);
-  numbers[3] = new CircleButton(positions[3][0], positions[3][1], GREEN, '3', 0x1004849);
-  numbers[4] = new CircleButton(positions[4][0], positions[4][1], GREEN, '4', 0x100C8C9);
-  numbers[5] = new CircleButton(positions[5][0], positions[5][1], GREEN, '5', 0x1002829);
-  numbers[6] = new CircleButton(positions[6][0], positions[6][1], GREEN, '6', 0x100A8A9);
-  numbers[7] = new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1006869);
-  numbers[8] = new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x100E8E9);
-  numbers[9] = new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1001819);
+//  numbers[0] = new CircleButton(positions[0][0], positions[0][1], GREEN, '0', 0x1009899);
+//  numbers[1] = new CircleButton(positions[1][0], positions[1][1], GREEN, '1', 0x1000809);
+//  numbers[2] = new CircleButton(positions[2][0], positions[2][1], GREEN, '2', 0x1008889);
+//  numbers[3] = new CircleButton(positions[3][0], positions[3][1], GREEN, '3', 0x1004849);
+//  numbers[4] = new CircleButton(positions[4][0], positions[4][1], GREEN, '4', 0x100C8C9);
+//  numbers[5] = new CircleButton(positions[5][0], positions[5][1], GREEN, '5', 0x1002829);
+//  numbers[6] = new CircleButton(positions[6][0], positions[6][1], GREEN, '6', 0x100A8A9);
+//  numbers[7] = new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1006869);
+//  numbers[8] = new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x100E8E9);
+//  numbers[9] = new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1001819);
+
+  numbers[0] = new TriangleButton(positions[0][0], positions[0][1], GREEN, TriangleButton::Type::UP, 0x1009899);
+  numbers[1] = new TriangleButton(positions[1][0], positions[1][1], GREEN, TriangleButton::Type::LEFT, 0x1000809);
+  numbers[2] = new TriangleButton(positions[2][0], positions[2][1], GREEN, TriangleButton::Type::RIGHT, 0x1008889);
+  numbers[3] = new TriangleButton(positions[3][0], positions[3][1], GREEN, TriangleButton::Type::DOWN, 0x1004849);
+  numbers[4] = new TriangleButton(positions[4][0], positions[4][1], GREEN, TriangleButton::Type::UP, 0x100C8C9);
+  numbers[5] = new TriangleButton(positions[5][0], positions[5][1], GREEN, TriangleButton::Type::UP, 0x1002829);
+  numbers[6] = new TriangleButton(positions[6][0], positions[6][1], GREEN, TriangleButton::Type::UP, 0x100A8A9);
+  numbers[7] = new TriangleButton(positions[7][0], positions[7][1], GREEN, TriangleButton::Type::UP, 0x1006869);
+  numbers[8] = new TriangleButton(positions[8][0], positions[8][1], GREEN, TriangleButton::Type::UP, 0x100E8E9);
+  numbers[9] = new TriangleButton(positions[9][0], positions[9][1], GREEN, TriangleButton::Type::UP, 0x1001819);
 
 
   // draw digit buttons
@@ -238,7 +250,7 @@ void loop() {
         if(numbers[i] -> isPressed(p.x, p.y)) {
           numbers[i] -> pressButton();
           Serial.println(i);
-          delay(200); // wait for 200 ms before resetting the buttons state
+          //delay(200); // wait for 200 ms before resetting the buttons state
           numbers[i] -> resetButton();
         }
       }

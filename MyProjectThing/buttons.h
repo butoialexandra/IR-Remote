@@ -49,4 +49,44 @@ class CircleButton: public Button {
       hexCode = h;
     }
 };
+
+class SquareButton: public Button {
+  public:
+    const int height = 56;
+    const int width = 56;
+    const int radius = 8;
+    char label;
+    void drawButton();
+    void pressButton();
+    void resetButton();
+    bool isPressed(int x, int y);
+    SquareButton(int x, int y, uint16_t c, char l, unsigned long h)
+    {
+      xPos = x;
+      yPos = y;
+      colour = c;
+      label = l;
+      hexCode = h;
+    }
+};
+
+class TriangleButton: public Button {
+  public:
+    enum Type {UP, DOWN, LEFT, RIGHT};
+    const int height = 56;
+    const int width = 56;
+    Type type;
+    void drawButton();
+    void pressButton();
+    void resetButton();
+    bool isPressed(int x, int y);
+    TriangleButton(int x, int y, uint16_t c, Type t, unsigned long h)
+    {
+      xPos = x;
+      yPos = y;
+      colour = c;
+      hexCode = h;
+      type = t;
+    }
+};
 #endif
