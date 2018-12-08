@@ -38,7 +38,6 @@ class CircleButton: public Button {
     void drawButton();
     void pressButton();
     void resetButton();
-    double distanceFromCentre(int x, int y);
     bool isPressed(int x, int y);
     CircleButton(int x, int y, uint16_t c, char l, unsigned long h)
     {
@@ -87,6 +86,22 @@ class TriangleButton: public Button {
       colour = c;
       hexCode = h;
       type = t;
+    }
+};
+
+
+class PowerButton: public CircleButton {
+  public:
+    void pressButton();
+    void resetButton();
+    PowerButton(int x, int y, uint16_t c, char l, unsigned long h)
+    : CircleButton(x, y, c, l, h)
+    {
+      xPos = x;
+      yPos = y;
+      colour = c;
+      label = l;
+      hexCode = h;
     }
 };
 #endif

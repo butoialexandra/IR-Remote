@@ -23,6 +23,7 @@ int SCREEN_HEIGHT = 480;
 
 // declare array of digit buttons
 CircleButton *numbers [10];
+PowerButton *power = new PowerButton(40, 445, RED, 'P', 0x100BCBD);
 //TriangleButton *numbers [10];
 
 void setup() {
@@ -129,7 +130,7 @@ void drawButtons() {
   numbers[7] = new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1006869);
   numbers[8] = new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x100E8E9);
   numbers[9] = new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1001819);
-
+  
 //  numbers[0] = new TriangleButton(positions[0][0], positions[0][1], GREEN, TriangleButton::Type::UP, 0x1009899);
 //  numbers[1] = new TriangleButton(positions[1][0], positions[1][1], GREEN, TriangleButton::Type::LEFT, 0x1000809);
 //  numbers[2] = new TriangleButton(positions[2][0], positions[2][1], GREEN, TriangleButton::Type::RIGHT, 0x1008889);
@@ -146,13 +147,10 @@ void drawButtons() {
   for (int i = 0; i < 10; i++) {
     numbers[i] -> drawButton();
   }
-  
-  
-  /*
-  // POWER BUTTON
-  tft.fillCircle(SCREEN_WIDTH / 5 * 4, SCREEN_HEIGHT / 8, 28, RED);
 
-  
+  power -> drawButton();
+
+  /*
   // MENU
   int pos_x = SCREEN_WIDTH / 5;
   int pos_y = SCREEN_HEIGHT / 8 * 6;
@@ -219,8 +217,9 @@ unsigned long prevSigMillis = 0; // previous signal acceptance time
 unsigned long sincePrevSig = 0;  // time since previous signal acceptance
 uint16_t TIME_SENSITIVITY = 300; // 300 ms between touches
 bool firstTime = true;           // first time in loop
-int lastPressed;                 // the number pressed last
+int lastPressed = -1;            // the number pressed last, -1 by default
 int iterationsSincePrev = 0;     // iterations since previous signal acceptance
+
 
 void loop() {
   bool usbPowerOn = checkPowerSwitch(); // shutdown if switch off
@@ -233,10 +232,15 @@ void loop() {
     sincePrevSig = now - prevSigMillis;
   }
 
-  // reset button colour after 100 iterations
-  if(iterationsSincePrev == 100) {
-    numbers[lastPressed] -> resetButton();
-    iterationsSincePrev = 0;
+  // reset button colour after 50 iterations
+  if(iterationsSincePrev == 50) {
+    if (lastPressed > -1) {                    // number button was pressed
+      numbers[lastPressed] -> resetButton();
+      lastPressed = -1;                        // reset last number pressed
+    } else {
+      power -> resetButton();                  // power button was pressed
+    }
+    iterationsSincePrev = 0;                   // reset counter
   }
   
   Serial.println(iterationsSincePrev);
@@ -249,13 +253,15 @@ void loop() {
 
   // only handle touches every 300ms
   if (sincePrevSig > TIME_SENSITIVITY) {
+    
     // scale the point from ~0->4000 to tft.width using the calibration #'s
     p.x = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
     p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
     
     // if touch has enough pressure
     if (p.z > 10 && p.z < 50) {
-      // check which button has been pressed
+      
+      // check whether a number button is pressed
       for (int i = 0; i < 10; i++) {
         if(numbers[i] -> isPressed(p.x, p.y)) {
           numbers[i] -> pressButton();
@@ -264,9 +270,19 @@ void loop() {
           Serial.println(i);
         }
       }
+      
+     // check if power button is pressed
+     if(power -> isPressed(p.x, p.y)){
+        for (int i=0; i < 5; i++) {
+          power -> pressButton();
+        }
+        
+        iterationsSincePrev = 1; // begin iterating after button press
+        // prevSigMillis = now; // power on requires 5 signals back to back (within ~250ms), bypass time sensitivity
+      }
     }
-    // successful touch, update time
-    prevSigMillis = now;
+    
+    prevSigMillis = now; // successful touch, update time
   }
 
   // only iterate if button has been pressed

@@ -23,6 +23,7 @@ void TriangleButton::drawButton() {
   }
 }
 
+// Press button
 void CircleButton::pressButton() {
   IRsend irsend;
   irsend.sendPanasonic(PanasonicAddress, hexCode);
@@ -44,6 +45,15 @@ void TriangleButton::pressButton() {
   this -> drawButton();
 }
 
+void PowerButton::pressButton() {
+  IRsend irsend;
+  colour = GREEN;
+  this -> drawButton();
+  // simulate holding down the power button
+  irsend.sendPanasonic(PanasonicAddress, hexCode);
+}
+
+// Check if a button isPressed
 bool CircleButton::isPressed(int x, int y) {
  return x < (xPos + radius) && x > (xPos - radius)
      && y < (yPos + radius) && y > (yPos - radius);
@@ -59,6 +69,8 @@ bool TriangleButton::isPressed(int x, int y) {
      && y < (yPos + height/2) && y > (yPos - height/2);
 }
 
+
+// Reset buttons
 void CircleButton::resetButton() {
   colour = GREEN;
   this -> drawButton();
@@ -74,8 +86,7 @@ void TriangleButton::resetButton() {
   this -> drawButton();
 }
 
-//bool CircleButton::isPressed(int x, int y) {
-//  int squaredSums = (x-xPos)^2 + (y-yPos)^2; // must be int to avoid NaN error
-//  int squaredRadius = radius^2; // must be int also
-//  return squaredSums < squaredRadius;
-//}
+void PowerButton::resetButton() {
+  colour = RED;
+  this -> drawButton();
+}
