@@ -9,8 +9,8 @@ void CircleButton::drawButton() {
 }
 
 void SquareButton::drawButton() {
-  tft.fillRoundRect(xPos, yPos, height, width, radius, colour);
-  tft.drawChar(xPos + 14, yPos + 12, label, BLACK, colour, 5);
+  tft.fillRoundRect(xPos - width/2, yPos - height/2, height, width, radius, colour);
+  tft.drawChar(xPos - width/2 + 14, yPos - height/2 + 12, label, BLACK, colour, 5);
 }
 
 void TriangleButton::drawButton() {

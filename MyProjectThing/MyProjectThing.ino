@@ -24,7 +24,6 @@ int SCREEN_HEIGHT = 480;
 // declare array of digit buttons
 CircleButton *numbers [10];
 PowerButton *power = new PowerButton(40, 445, RED, 'P', 0x100BCBD);
-//TriangleButton *numbers [10];
 
 void setup() {
   Wire.setClock(100000); // higher rates trigger an IOExpander bug
@@ -89,14 +88,68 @@ void setup() {
   lmic_init();
   lmic_do_send(&sendjob);
 
-
-
   // draw 0-9 buttons
-  drawButtons();
+  drawNumericalButtons();
+  drawFunctionButtons();
+}
+
+// draw function buttons
+void drawFunctionButtons() {
+  // make black screen
+  tft.fillScreen(BLACK);
+  tft.drawLine(0,0,319,0,WHITE);
+  tft.drawLine(319,0,319,479,WHITE);
+  tft.drawLine(319,479,0,479,WHITE);
+  tft.drawLine(0,479,0,0,WHITE);
+
+  // mute
+  CircleButton *mute = new CircleButton(50, 50, WHITE, 'M', 0x1004C4D);
+  mute -> drawButton();
+  // channel >
+  SquareButton *channelRight = new SquareButton(260, 110, WHITE, '>', 0x1002C2D);
+  channelRight -> drawButton();
+  // channel <
+  SquareButton *channelLeft = new SquareButton(140, 110, WHITE, '<', 0x1002C2D);
+  channelLeft -> drawButton();
+  // volume + 
+  SquareButton *volumeUp = new SquareButton(200, 70, WHITE, '+', 0x1002C2D);
+  volumeUp -> drawButton();
+  // volume -
+  SquareButton *volumeDown = new SquareButton(200, 150, WHITE, '-', 0x1002C2D);
+  volumeDown -> drawButton();
+  // tune 
+  CircleButton *tune = new CircleButton(50, 115, WHITE, 'T', 0x100ECED);
+  tune -> drawButton();
+  // left 
+  TriangleButton *left = new TriangleButton(130, 330, WHITE, TriangleButton::Type::LEFT, 0x1007273);
+  left -> drawButton();
+  // right
+  TriangleButton *right = new TriangleButton(270, 330, WHITE, TriangleButton::Type::RIGHT, 0x100f2f3);
+  right -> drawButton();
+  // up
+  TriangleButton *up = new TriangleButton(200, 260, WHITE, TriangleButton::Type::UP, 0x1005253);
+  up -> drawButton();
+  // down
+  TriangleButton *down = new TriangleButton(200, 400, WHITE, TriangleButton::Type::DOWN, 0x1005253);
+  down -> drawButton();
+  // enter 
+  SquareButton *enter = new SquareButton(200, 330, RED, 'E', 0x1009293);
+  enter -> drawButton();
+  // back
+  CircleButton *back = new CircleButton(50, 245, WHITE, 'B', 0x1002B2A);
+  back -> drawButton();
+  // menu
+
+  // source
+  CircleButton *source = new CircleButton(50, 180, WHITE, 'S', 0x100A0A1);
+  source -> drawButton();
+
+  power -> drawButton();
+  
 }
 
 // draw 0-9 buttons
-void drawButtons() {
+void drawNumericalButtons() {
   // make black screen
   tft.fillScreen(BLACK);
   tft.drawLine(0,0,319,0,WHITE);
