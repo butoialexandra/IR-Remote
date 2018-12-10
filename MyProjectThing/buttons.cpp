@@ -28,10 +28,6 @@ void ChangePageButton::drawButton() {
   tft.drawChar(xPos - width/2 + 14, yPos - height/2 + 12, label, BLACK, WHITE, 5);
 }
 
-void ChangePageButton::pressButton() {
-  Serial.print("Changed page");
-}
-
 // Press button
 void CircleButton::pressButton() {
   IRsend irsend;

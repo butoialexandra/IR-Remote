@@ -81,7 +81,6 @@ class ChangePageButton: public Button {
     const int radius = 8;
     const char label = '>';
     void drawButton();
-    void pressButton();
     bool isPressed(int x, int y);
     ChangePageButton(int x, int y)
     {
