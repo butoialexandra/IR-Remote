@@ -1,12 +1,16 @@
 #include "UI.h"
 #include "unphone.h"
 
-// Variables for controlling the button touches
+/*
+ * Variables for registering sensible touch
+ */
 unsigned long now = 0;           // millis
 unsigned long prevSigMillis = 0; // previous signal acceptance time
 unsigned long sincePrevSig = 0;  // time since previous signal acceptance
 uint16_t TIME_SENSITIVITY = 300; // 300 ms between touches
 bool firstTime = true;           // first time in loop
+
+// Timers for each button press by type
 int lastPressedCircle = -1;      // the number pressed last, -1 by default
 int lastPressedSquare = -1;      // the number pressed last, -1 by default
 int lastPressedTriangle = -1;    // the number pressed last, -1 by default
@@ -16,17 +20,6 @@ int iterationsSincePrev = 0;     // iterations since previous signal acceptance
 int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
 
-void UI::drawUI() {
-  drawBlackScreen();
-  for(int i = 0; i<circleButtons.size(); i++) 
-    circleButtons[i] -> drawButton();
-  for(int i = 0; i<squareButtons.size(); i++) 
-    squareButtons[i] -> drawButton();
-  for(int i = 0; i<triangleButtons.size(); i++) 
-    triangleButtons[i] -> drawButton();
-  power -> drawButton();
-  change -> drawButton();
-}
 
 
 
@@ -41,8 +34,6 @@ void UI::handleTouch() {
 
   // reset button colour after 50 iterations
   if(iterationsSincePrev == 50) {
-
-   
     if (lastPressedCircle > -1) {                           // Handle Circle Pressed                
       circleButtons[lastPressedCircle] -> resetButton();
       lastPressedCircle = -1;                        
@@ -58,10 +49,10 @@ void UI::handleTouch() {
     iterationsSincePrev = 0;                                // Reset counter
   }
  
-
   // retrieve the touch point
   TS_Point p = ts.getPoint();
 
+  // no longer first time into loop
   firstTime = false;
 
   // only handle touches every 300ms
@@ -115,6 +106,7 @@ void UI::handleTouch() {
        if(power -> isPressed(p.x, p.y)){
           for (int i=0; i < 5; i++) {
             power -> pressButton();
+            delay(50);
           }
           
           iterationsSincePrev = 1; // begin iterating after button press
@@ -132,12 +124,21 @@ void UI::handleTouch() {
   }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ *  Functions for drawing the UI
+ */
 // Adds function buttons to the User Interface
 void UI::drawFunctionButtons() {
+  
+  // Clear current buttons
   circleButtons.clear();
   squareButtons.clear();
   triangleButtons.clear();
-  
+
+  // Create the new buttons of each shape
   circleButtons = {
     new CircleButton(50, 50, WHITE, RED, 'M', 0x1004C4D),                                  // Mute
     new CircleButton(50, 115, WHITE, RED, 'T', 0x100ECED),                                 // Tune
@@ -159,13 +160,17 @@ void UI::drawFunctionButtons() {
     new TriangleButton(200, 260, WHITE, RED, TriangleButton::Type::UP, 0x1005253),         // Up
     new TriangleButton(200, 400, WHITE, RED, TriangleButton::Type::DOWN, 0x1005253)        // Down  
   };
+  
+  // Change page and redraw
   page = FUNCTIONAL;
   drawUI();
 }
 
+
 // Adds numerical buttons to the User Interface
 void UI::drawNumericalButtons() {
 
+  // Empty the current buttons
   circleButtons.clear();
   squareButtons.clear();
   triangleButtons.clear();
@@ -186,21 +191,25 @@ void UI::drawNumericalButtons() {
     }
    }
    
+  // Create the new buttons
   circleButtons = {
-    new CircleButton(positions[0][0], positions[0][1], GREEN, RED, '0', 0x1009899),
-    new CircleButton(positions[1][0], positions[1][1], GREEN, RED, '1', 0x1000809),
-    new CircleButton(positions[2][0], positions[2][1], GREEN, RED, '2', 0x1008889),
-    new CircleButton(positions[3][0], positions[3][1], GREEN, RED, '3', 0x1004849),
-    new CircleButton(positions[4][0], positions[4][1], GREEN, RED, '4', 0x100C8C9),
-    new CircleButton(positions[5][0], positions[5][1], GREEN, RED, '5', 0x1002829),
-    new CircleButton(positions[6][0], positions[6][1], GREEN, RED, '6', 0x100A8A9),
-    new CircleButton(positions[7][0], positions[7][1], GREEN, RED, '7', 0x1006869),
-    new CircleButton(positions[8][0], positions[8][1], GREEN, RED, '8', 0x100E8E9),
-    new CircleButton(positions[9][0], positions[9][1], GREEN, RED, '9', 0x1001819)
+    new CircleButton(positions[0][0], positions[0][1], GREEN, RED, '0', 0x1009899),      // 0
+    new CircleButton(positions[1][0], positions[1][1], GREEN, RED, '1', 0x1000809),      // 1
+    new CircleButton(positions[2][0], positions[2][1], GREEN, RED, '2', 0x1008889),      // 2
+    new CircleButton(positions[3][0], positions[3][1], GREEN, RED, '3', 0x1004849),      // 3
+    new CircleButton(positions[4][0], positions[4][1], GREEN, RED, '4', 0x100C8C9),      // 4
+    new CircleButton(positions[5][0], positions[5][1], GREEN, RED, '5', 0x1002829),      // 5
+    new CircleButton(positions[6][0], positions[6][1], GREEN, RED, '6', 0x100A8A9),      // 6
+    new CircleButton(positions[7][0], positions[7][1], GREEN, RED, '7', 0x1006869),      // 7
+    new CircleButton(positions[8][0], positions[8][1], GREEN, RED, '8', 0x100E8E9),      // 8
+    new CircleButton(positions[9][0], positions[9][1], GREEN, RED, '9', 0x1001819)       // 9
   };
+
+  // Switch page and redraw
   page = NUMERICAL;
   drawUI();
 }
+
 
 // Draw a black screen with white edges
 void UI::drawBlackScreen() {
@@ -211,6 +220,7 @@ void UI::drawBlackScreen() {
   tft.drawLine(0,479,0,0,WHITE);
 }
 
+
 // Change the current page to the other page
 void UI::changePage() {
   if (page == NUMERICAL) {
@@ -218,5 +228,18 @@ void UI::changePage() {
   } else {
     drawNumericalButtons();
   }
+}
+
+
+void UI::drawUI() {
+  drawBlackScreen();
+  for(int i = 0; i<circleButtons.size(); i++) 
+    circleButtons[i] -> drawButton();
+  for(int i = 0; i<squareButtons.size(); i++) 
+    squareButtons[i] -> drawButton();
+  for(int i = 0; i<triangleButtons.size(); i++) 
+    triangleButtons[i] -> drawButton();
+  power -> drawButton();
+  change -> drawButton();
 }
 

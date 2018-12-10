@@ -54,7 +54,6 @@ void PowerButton::pressButton() {
   IRsend irsend;
   currentColour = inactiveColour;
   this -> drawButton();
-  // simulate holding down the power button
   irsend.sendPanasonic(PanasonicAddress, hexCode);
 }
 
