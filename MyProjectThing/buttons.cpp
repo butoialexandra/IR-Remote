@@ -23,6 +23,15 @@ void TriangleButton::drawButton() {
   }
 }
 
+void ChangePageButton::drawButton() {
+  tft.fillRoundRect(xPos - width/2, yPos - height/2, height, width, radius, WHITE);
+  tft.drawChar(xPos - width/2 + 14, yPos - height/2 + 12, label, BLACK, WHITE, 5);
+}
+
+void ChangePageButton::pressButton() {
+  Serial.print("Changed page");
+}
+
 // Press button
 void CircleButton::pressButton() {
   IRsend irsend;
@@ -60,6 +69,11 @@ bool CircleButton::isPressed(int x, int y) {
 }
 
 bool SquareButton::isPressed(int x, int y) {
+ return x < (xPos + width/2) && x > (xPos - width/2)
+     && y < (yPos + height/2) && y > (yPos - height/2);
+}
+
+bool ChangePageButton::isPressed(int x, int y) {
  return x < (xPos + width/2) && x > (xPos - width/2)
      && y < (yPos + height/2) && y > (yPos - height/2);
 }

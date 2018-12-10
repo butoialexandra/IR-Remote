@@ -14,6 +14,12 @@ class Button {
     const unsigned int PanasonicAddress = 0x4004;
     unsigned long hexCode; // keep the hex code private
 
+  public:
+    int xPos, yPos;
+    bool pressed;
+    uint16_t colour;
+    void drawButton();
+    void pressButton(Button);
     const uint16_t BLACK =   HX8357_BLACK;
     const uint16_t BLUE =    HX8357_BLUE;
     const uint16_t RED =     HX8357_RED;
@@ -22,13 +28,6 @@ class Button {
     const uint16_t MAGENTA = HX8357_MAGENTA;
     const uint16_t YELLOW =  HX8357_YELLOW;
     const uint16_t WHITE =   HX8357_WHITE;
-
-  public:
-    int xPos, yPos;
-    bool pressed;
-    uint16_t colour;
-    void drawButton();
-    void pressButton(Button);
 };
 
 class CircleButton: public Button {
@@ -66,6 +65,22 @@ class SquareButton: public Button {
       colour = c;
       label = l;
       hexCode = h;
+    }
+};
+
+class ChangePageButton: public Button {
+  public:
+    const int height = 56;
+    const int width = 56;
+    const int radius = 8;
+    const char label = '>';
+    void drawButton();
+    void pressButton();
+    bool isPressed(int x, int y);
+    ChangePageButton(int x, int y)
+    {
+      xPos = x;
+      yPos = y;
     }
 };
 
