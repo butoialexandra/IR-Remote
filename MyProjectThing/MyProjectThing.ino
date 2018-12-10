@@ -106,25 +106,25 @@ void drawFunctionButtons() {
   tft.drawLine(0,479,0,0,WHITE);
   
   std::vector<CircleButton*> circleButtons{
-    new CircleButton(50, 50, WHITE, 'M', 0x1004C4D),                                  // Mute
-    new CircleButton(50, 115, WHITE, 'T', 0x100ECED),                                 // Tune
-    new CircleButton(50, 245, WHITE, 'B', 0x1002B2A),                                 // Back
-    new CircleButton(50, 180, WHITE, 'S', 0x100A0A1)                                  // Source
+    new CircleButton(50, 50, WHITE, RED, 'M', 0x1004C4D),                                  // Mute
+    new CircleButton(50, 115, WHITE, RED, 'T', 0x100ECED),                                 // Tune
+    new CircleButton(50, 245, WHITE, RED, 'B', 0x1002B2A),                                 // Back
+    new CircleButton(50, 180, WHITE, RED, 'S', 0x100A0A1)                                  // Source
     };
 
   std::vector<SquareButton*> squareButtons{
-    new SquareButton(260, 110, WHITE, '>', 0x1002C2D),                                // Channel Up
-    new SquareButton(140, 110, WHITE, '<', 0x1002C2D),                                // Channel Down
-    new SquareButton(200, 70, WHITE, '+', 0x1002C2D),                                 // Volume Up
-    new SquareButton(200, 150, WHITE, '-', 0x1002C2D),                                // Volume Down
-    new SquareButton(200, 330, RED, 'E', 0x1009293)                                   // Enter
+    new SquareButton(260, 110, WHITE, RED, '>', 0x1002C2D),                                // Channel Up
+    new SquareButton(140, 110, WHITE, RED, '<', 0x1002C2D),                                // Channel Down
+    new SquareButton(200, 70, WHITE, RED, '+', 0x1002C2D),                                 // Volume Up
+    new SquareButton(200, 150, WHITE, RED, '-', 0x1002C2D),                                // Volume Down
+    new SquareButton(200, 330, RED, WHITE, 'E', 0x1009293)                                 // Enter
   };
 
   std::vector<TriangleButton*> triangleButtons{
-    new TriangleButton(130, 330, WHITE, TriangleButton::Type::LEFT, 0x1007273),       // Left
-    new TriangleButton(270, 330, WHITE, TriangleButton::Type::RIGHT, 0x100f2f3),      // Right
-    new TriangleButton(200, 260, WHITE, TriangleButton::Type::UP, 0x1005253),         // Up
-    new TriangleButton(200, 400, WHITE, TriangleButton::Type::DOWN, 0x1005253)        // Down  
+    new TriangleButton(130, 330, WHITE, RED, TriangleButton::Type::LEFT, 0x1007273),       // Left
+    new TriangleButton(270, 330, WHITE, RED, TriangleButton::Type::RIGHT, 0x100f2f3),      // Right
+    new TriangleButton(200, 260, WHITE, RED, TriangleButton::Type::UP, 0x1005253),         // Up
+    new TriangleButton(200, 400, WHITE, RED, TriangleButton::Type::DOWN, 0x1005253)        // Down  
   };
 
   pageOne = new UI(circleButtons, squareButtons, triangleButtons);
@@ -158,16 +158,16 @@ void drawNumericalButtons() {
    }
    
   std::vector<CircleButton*> circleButtons = {
-    new CircleButton(positions[0][0], positions[0][1], GREEN, '0', 0x1009899),
-    new CircleButton(positions[1][0], positions[1][1], GREEN, '1', 0x1000809),
-    new CircleButton(positions[2][0], positions[2][1], GREEN, '2', 0x1008889),
-    new CircleButton(positions[3][0], positions[3][1], GREEN, '3', 0x1004849),
-    new CircleButton(positions[4][0], positions[4][1], GREEN, '4', 0x100C8C9),
-    new CircleButton(positions[5][0], positions[5][1], GREEN, '5', 0x1002829),
-    new CircleButton(positions[6][0], positions[6][1], GREEN, '6', 0x100A8A9),
-    new CircleButton(positions[7][0], positions[7][1], GREEN, '7', 0x1006869),
-    new CircleButton(positions[8][0], positions[8][1], GREEN, '8', 0x100E8E9),
-    new CircleButton(positions[9][0], positions[9][1], GREEN, '9', 0x1001819)
+    new CircleButton(positions[0][0], positions[0][1], GREEN, RED, '0', 0x1009899),
+    new CircleButton(positions[1][0], positions[1][1], GREEN, RED, '1', 0x1000809),
+    new CircleButton(positions[2][0], positions[2][1], GREEN, RED, '2', 0x1008889),
+    new CircleButton(positions[3][0], positions[3][1], GREEN, RED, '3', 0x1004849),
+    new CircleButton(positions[4][0], positions[4][1], GREEN, RED, '4', 0x100C8C9),
+    new CircleButton(positions[5][0], positions[5][1], GREEN, RED, '5', 0x1002829),
+    new CircleButton(positions[6][0], positions[6][1], GREEN, RED, '6', 0x100A8A9),
+    new CircleButton(positions[7][0], positions[7][1], GREEN, RED, '7', 0x1006869),
+    new CircleButton(positions[8][0], positions[8][1], GREEN, RED, '8', 0x100E8E9),
+    new CircleButton(positions[9][0], positions[9][1], GREEN, RED, '9', 0x1001819)
   };
 
   // Make empty vector of triangle buttons as none on page

@@ -12,7 +12,7 @@
 
 class UI {
   public:
-    PowerButton *power = new PowerButton(40, 445, 0xF800, 'P', 0x100BCBD);
+    PowerButton *power = new PowerButton(40, 445, 0xF800, 0x07E0, 'P', 0x100BCBD);
     ChangePageButton *change = new ChangePageButton(270, 445);
     std::vector<CircleButton*> circleButtons;
     std::vector<SquareButton*> squareButtons;

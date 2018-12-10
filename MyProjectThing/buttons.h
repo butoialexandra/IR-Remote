@@ -17,7 +17,9 @@ class Button {
   public:
     int xPos, yPos;
     bool pressed;
-    uint16_t colour;
+    uint16_t activeColour;
+    uint16_t inactiveColour;
+    uint16_t currentColour;
     void drawButton();
     void pressButton(Button);
     const uint16_t BLACK =   HX8357_BLACK;
@@ -38,11 +40,13 @@ class CircleButton: public Button {
     void pressButton();
     void resetButton();
     bool isPressed(int x, int y);
-    CircleButton(int x, int y, uint16_t c, char l, unsigned long h)
+    CircleButton(int x, int y, uint16_t ac, uint16_t ic, char l, unsigned long h)
     {
       xPos = x;
       yPos = y;
-      colour = c;
+      activeColour = ac;
+      inactiveColour = ic;
+      currentColour = ac;
       label = l;
       hexCode = h;
     }
@@ -58,11 +62,13 @@ class SquareButton: public Button {
     void pressButton();
     void resetButton();
     bool isPressed(int x, int y);
-    SquareButton(int x, int y, uint16_t c, char l, unsigned long h)
+    SquareButton(int x, int y, uint16_t ac, uint16_t ic, char l, unsigned long h)
     {
       xPos = x;
       yPos = y;
-      colour = c;
+      activeColour = ac;
+      inactiveColour = ic;
+      currentColour = ac;
       label = l;
       hexCode = h;
     }
@@ -94,11 +100,13 @@ class TriangleButton: public Button {
     void pressButton();
     void resetButton();
     bool isPressed(int x, int y);
-    TriangleButton(int x, int y, uint16_t c, Type t, unsigned long h)
+    TriangleButton(int x, int y, uint16_t ac, uint16_t ic, Type t, unsigned long h)
     {
       xPos = x;
       yPos = y;
-      colour = c;
+      activeColour = ac;
+      inactiveColour = ic;
+      currentColour = ac;
       hexCode = h;
       type = t;
     }
@@ -109,12 +117,14 @@ class PowerButton: public CircleButton {
   public:
     void pressButton();
     void resetButton();
-    PowerButton(int x, int y, uint16_t c, char l, unsigned long h)
-    : CircleButton(x, y, c, l, h)
+    PowerButton(int x, int y, uint16_t ac, uint16_t ic, char l, unsigned long h)
+    : CircleButton(x, y, ac, ic, l, h)
     {
       xPos = x;
       yPos = y;
-      colour = c;
+      activeColour = ac;
+      inactiveColour = ic;
+      currentColour = ac;
       label = l;
       hexCode = h;
     }

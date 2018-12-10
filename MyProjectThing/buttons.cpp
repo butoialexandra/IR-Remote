@@ -4,22 +4,22 @@
 bool pressSuccess = false; // whether the button press has been successful
 
 void CircleButton::drawButton() {
-  tft.fillCircle(xPos, yPos, radius, colour);
-  tft.drawChar(xPos - 12, yPos - 16, label, BLACK, colour, 5);
+  tft.fillCircle(xPos, yPos, radius, currentColour);
+  tft.drawChar(xPos - 12, yPos - 16, label, BLACK, currentColour, 5);
 }
 
 void SquareButton::drawButton() {
-  tft.fillRoundRect(xPos - width/2, yPos - height/2, height, width, radius, colour);
-  tft.drawChar(xPos - width/2 + 14, yPos - height/2 + 12, label, BLACK, colour, 5);
+  tft.fillRoundRect(xPos - width/2, yPos - height/2, height, width, radius, currentColour);
+  tft.drawChar(xPos - width/2 + 14, yPos - height/2 + 12, label, BLACK, currentColour, 5);
 }
 
 void TriangleButton::drawButton() {
   switch(type) {
-    case TriangleButton::Type::LEFT : tft.fillTriangle(xPos - width/2, yPos, xPos + width/2, yPos - height/2, xPos + width/2, yPos + height/2, colour); break;
-    case TriangleButton::Type::RIGHT : tft.fillTriangle(xPos + width/2, yPos, xPos - width/2, yPos - height/2, xPos - width/2, yPos + height/2, colour); break;
-    case TriangleButton::Type::UP : tft.fillTriangle(xPos - width/2, yPos + height/2, xPos, yPos - height/2, xPos + width/2, yPos + height/2, colour); break;
-    case TriangleButton::Type::DOWN : tft.fillTriangle(xPos - width/2, yPos - height/2, xPos, yPos + height/2, xPos + width/2, yPos - height/2, colour); break;
-    default : tft.fillTriangle(xPos - width/2, yPos, xPos + width/2, yPos - height/2, xPos + width/2, yPos + height/2, colour); break;
+    case TriangleButton::Type::LEFT : tft.fillTriangle(xPos - width/2, yPos, xPos + width/2, yPos - height/2, xPos + width/2, yPos + height/2, currentColour); break;
+    case TriangleButton::Type::RIGHT : tft.fillTriangle(xPos + width/2, yPos, xPos - width/2, yPos - height/2, xPos - width/2, yPos + height/2, currentColour); break;
+    case TriangleButton::Type::UP : tft.fillTriangle(xPos - width/2, yPos + height/2, xPos, yPos - height/2, xPos + width/2, yPos + height/2, currentColour); break;
+    case TriangleButton::Type::DOWN : tft.fillTriangle(xPos - width/2, yPos - height/2, xPos, yPos + height/2, xPos + width/2, yPos - height/2, currentColour); break;
+    default : tft.fillTriangle(xPos - width/2, yPos, xPos + width/2, yPos - height/2, xPos + width/2, yPos + height/2, currentColour); break;
   }
 }
 
@@ -36,27 +36,27 @@ void ChangePageButton::pressButton() {
 void CircleButton::pressButton() {
   IRsend irsend;
   irsend.sendPanasonic(PanasonicAddress, hexCode);
-  colour = RED;
+  currentColour = inactiveColour;
   this -> drawButton();
 }
 
 void SquareButton::pressButton() {
   IRsend irsend;
   irsend.sendPanasonic(PanasonicAddress, hexCode);
-  colour = RED;
+  currentColour = inactiveColour;
   this -> drawButton();
 }
 
 void TriangleButton::pressButton() {
   IRsend irsend;
   irsend.sendPanasonic(PanasonicAddress, hexCode);
-  colour = RED;
+  currentColour = inactiveColour;
   this -> drawButton();
 }
 
 void PowerButton::pressButton() {
   IRsend irsend;
-  colour = GREEN;
+  currentColour = inactiveColour;
   this -> drawButton();
   // simulate holding down the power button
   irsend.sendPanasonic(PanasonicAddress, hexCode);
@@ -86,21 +86,21 @@ bool TriangleButton::isPressed(int x, int y) {
 
 // Reset buttons
 void CircleButton::resetButton() {
-  colour = GREEN;
+  currentColour = activeColour;
   this -> drawButton();
 }
 
 void SquareButton::resetButton() {
-  colour = WHITE;
+  currentColour = activeColour;
   this -> drawButton();
 }
 
 void TriangleButton::resetButton() {
-  colour = WHITE;
+  currentColour = activeColour;
   this -> drawButton();
 }
 
 void PowerButton::resetButton() {
-  colour = RED;
+  currentColour = activeColour;
   this -> drawButton();
 }
