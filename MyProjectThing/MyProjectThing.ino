@@ -21,19 +21,38 @@
 #define TS_MINY 100
 #define TS_MAXY 3750
 
-bool sendAdafruit = true;
+bool sendAdafruit = false;
 
-UI *pageOne;
-AdafruitIO_Feed *button0 = io.feed("0Button");
-AdafruitIO_Feed *button1 = io.feed("1Button");
-AdafruitIO_Feed *button2 = io.feed("2Button");
-AdafruitIO_Feed *button3 = io.feed("3Button");
-AdafruitIO_Feed *button4 = io.feed("4Button");
-AdafruitIO_Feed *button5 = io.feed("5Button");
-AdafruitIO_Feed *button6 = io.feed("6Button");
-AdafruitIO_Feed *button7 = io.feed("7Button");
-AdafruitIO_Feed *button8 = io.feed("8Button");
-AdafruitIO_Feed *button9 = io.feed("9Button");
+UI *ui;
+
+// Adafruit feeds for each button, storing the frequency of button presses
+AdafruitIO_Feed *buttonFeeds [10] = {io.feed("0Button"),
+                                    io.feed("1Button"),
+                                    io.feed("2Button"),
+                                    io.feed("3Button"),
+                                    io.feed("4Button"),
+                                    io.feed("5Button"),
+                                    io.feed("6Button"),
+                                    io.feed("7Button"),
+                                    io.feed("8Button"),
+                                    io.feed("9Button")
+                                   };
+                               
+  
+            
+//AdafruitIO_Feed *button0 = io.feed("0Button");
+//AdafruitIO_Feed *button1 = io.feed("1Button");
+//AdafruitIO_Feed *button2 = io.feed("2Button");
+//AdafruitIO_Feed *button3 = io.feed("3Button");
+//AdafruitIO_Feed *button4 = io.feed("4Button");
+//AdafruitIO_Feed *button5 = io.feed("5Button");
+//AdafruitIO_Feed *button6 = io.feed("6Button");
+//AdafruitIO_Feed *button7 = io.feed("7Button");
+//AdafruitIO_Feed *button8 = io.feed("8Button");
+//AdafruitIO_Feed *button9 = io.feed("9Button");
+
+// Array storing number of clicks for each numerical button 0 - 9
+int clickCount [10];
 
 void setup() {
   Wire.setClock(100000); // higher rates trigger an IOExpander bug
@@ -97,12 +116,8 @@ void setup() {
   // send a LoRaWAN message to TTN
   lmic_init();
   lmic_do_send(&sendjob);
-
-  // draw 0-9 buttons
-  //drawNumericalButtons();
-  //drawFunctionButtons();
   
-  pageOne = new UI();
+  ui = new UI();
   
   if (sendAdafruit) {
     // connect to io.adafruit.com
@@ -118,33 +133,46 @@ void setup() {
     // we are connected
     Serial.println();
     Serial.println(io.statusText());
-    pageOne -> colourDelayIterations = 5; // Accounting for delay to Adafruit
+    resetClickCount(); // clear the click count
   }
 }
-
-int clickCount [10] = {0}; // Counts of each numerical button being pressed, send this to Adafruit
 
 
 void loop() {
   // Always handle button press and check power
   bool usbPowerOn = checkPowerSwitch(); // shutdown if switch off
-  char buttonPress = pageOne -> handleTouch(); // check for touch
+  char buttonPress = ui -> handleTouch(); // handle the pressed button
   
   // Send data to Adafruit
   if (sendAdafruit) {
     io.run();
     // send analytics on number buttons to Adafruit.io
-    switch(buttonPress) {
-      case '0': clickCount[0] ++; button0 -> save(clickCount[0]); break;
-      case '1': clickCount[1] ++; button1 -> save(clickCount[1]); break;
-      case '2': clickCount[2] ++; button2 -> save(clickCount[2]); break;
-      case '3': clickCount[3] ++; button3 -> save(clickCount[3]); break;
-      case '4': clickCount[4] ++; button4 -> save(clickCount[4]); break;
-      case '5': clickCount[5] ++; button5 -> save(clickCount[5]); break;
-      case '6': clickCount[6] ++; button6 -> save(clickCount[6]); break;
-      case '7': clickCount[7] ++; button7 -> save(clickCount[7]); break;
-      case '8': clickCount[8] ++; button8 -> save(clickCount[8]); break;
-      case '9': clickCount[9] ++; button9 -> save(clickCount[9]); break;
+
+    if (isdigit(buttonPress)) {
+      int buttonNumber = (int) buttonPress - 48; // Subtract 48 as casts to ASCII code
+      clickCount[buttonNumber] ++;
+      buttonFeeds[buttonNumber] -> save(clickCount[buttonNumber]);
     }
+//    switch(buttonPress) {
+//      case '0': clickCount[0] ++; button0 -> save(clickCount[0]); break;
+//      case '1': clickCount[1] ++; button1 -> save(clickCount[1]); break;
+//      case '2': clickCount[2] ++; button2 -> save(clickCount[2]); break;
+//      case '3': clickCount[3] ++; button3 -> save(clickCount[3]); break;
+//      case '4': clickCount[4] ++; button4 -> save(clickCount[4]); break;
+//      case '5': clickCount[5] ++; button5 -> save(clickCount[5]); break;
+//      case '6': clickCount[6] ++; button6 -> save(clickCount[6]); break;
+//      case '7': clickCount[7] ++; button7 -> save(clickCount[7]); break;
+//      case '8': clickCount[8] ++; button8 -> save(clickCount[8]); break;
+//      case '9': clickCount[9] ++; button9 -> save(clickCount[9]); break;
+//    }
   }
 }
+
+
+void resetClickCount() {
+  for (int i=0; i<10; i++) {
+    clickCount[i] = 0;
+    buttonFeeds[i] -> save(clickCount[i]);
+  }
+}
+

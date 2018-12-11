@@ -37,12 +37,18 @@ void CircleButton::pressButton() {
   irsend.sendPanasonic(PanasonicAddress, hexCode);
   currentColour = inactiveColour;
   this -> drawButton();
+  delay(500);
+  currentColour = activeColour;
+  this -> drawButton();
 }
 
 void SquareButton::pressButton() {
   IRsend irsend;
   irsend.sendPanasonic(PanasonicAddress, hexCode);
   currentColour = inactiveColour;
+  this -> drawButton();
+  delay(500);
+  currentColour = activeColour;
   this -> drawButton();
 }
 
@@ -51,13 +57,22 @@ void TriangleButton::pressButton() {
   irsend.sendPanasonic(PanasonicAddress, hexCode);
   currentColour = inactiveColour;
   this -> drawButton();
+  delay(500);
+  currentColour = activeColour;
+  this -> drawButton();
 }
 
 void PowerButton::pressButton() {
   IRsend irsend;
   currentColour = inactiveColour;
   this -> drawButton();
-  irsend.sendPanasonic(PanasonicAddress, hexCode);
+  for (int i=0; i < 5; i++) {
+    irsend.sendPanasonic(PanasonicAddress, hexCode);
+    delay(50);
+  }
+  delay(250);
+  currentColour = activeColour;
+  this -> drawButton();
 }
 
 // Check if a button isPressed

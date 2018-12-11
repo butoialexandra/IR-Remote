@@ -1,65 +1,42 @@
 #include "UI.h"
 
 /*
- * Variables for registering sensible touch
+ * Variables for registering sensible touch; only register if > 300ms since last
  */
 unsigned long now = 0;           // millis
 unsigned long prevSigMillis = 0; // previous signal acceptance time
 unsigned long sincePrevSig = 0;  // time since previous signal acceptance
-uint16_t TIME_SENSITIVITY = 300; // 300 ms between touches
-bool firstTime = true;           // first time in loop
+uint16_t TIME_SENSITIVITY = 250; // 300 ms between touches
+bool firstTime = false;           // first time in loop
 
-// Timers for each button press by type
-int lastPressedCircle = -1;      // the number pressed last, -1 by default
-int lastPressedSquare = -1;      // the number pressed last, -1 by default
-int lastPressedTriangle = -1;    // the number pressed last, -1 by default
-int iterationsSincePrev = 0;     // iterations since previous signal acceptance
-
-// Variables for spacing numerical buttons
+/*
+ * Variables for calculating button positions
+ */
 int SCREEN_WIDTH = 320;
 int SCREEN_HEIGHT = 480;
-
 
 
 /*
  * Handles touch on UI, returning the label of the button pressed
  */
- 
 char UI::handleTouch() {
-  char buttonPressed = ' ';
+  char buttonPressed = ' '; // by default no sensible button is pressed
   
-  // Get the time
+  // work out time since last touch
   now = millis();
   if(firstTime) {
     sincePrevSig = TIME_SENSITIVITY + 1;
   } else {
     sincePrevSig = now - prevSigMillis;
   }
-
-  // reset button colour after 50 iterations
-  if(iterationsSincePrev == colourDelayIterations) {
-    if (lastPressedCircle > -1) {                           // Handle Circle Pressed                
-      circleButtons[lastPressedCircle] -> resetButton();
-      lastPressedCircle = -1;                        
-    } else if (lastPressedSquare > -1) {                    // Handle Square Pressed
-      squareButtons[lastPressedSquare] -> resetButton();
-      lastPressedSquare = -1;
-    } else if (lastPressedTriangle > -1) {                  // Handle Triangle Pressed
-      triangleButtons[lastPressedTriangle] -> resetButton();
-      lastPressedTriangle = -1;
-    } else {
-      power -> resetButton();                               // Power button was pressed
-    }
-    iterationsSincePrev = 0;                                // Reset counter
-  }
- 
+  
   // retrieve the touch point
   TS_Point p = ts.getPoint();
 
   // no longer first time into loop
   firstTime = false;
 
-  // only handle touches every 300ms
+  // only handle touch if longer than 300 ms since last touch
   if (sincePrevSig > TIME_SENSITIVITY) {
     
     // scale the point from ~0->4000 to tft.width using the calibration #'s
@@ -67,78 +44,45 @@ char UI::handleTouch() {
     p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
 
     if (ts.touched()) {
-      Serial.println("Touched");
-    // if touch has enough pressure
-      if (p.z > 10 && p.z < 50) {
-        
-        // check whether a circle button is pressed
-        for (int i = 0; i < circleButtons.size(); i++) {
+      if (p.z > 10 && p.z < 50) {                                        // if touch has enough pressure
+        for (int i = 0; i < circleButtons.size(); i++) {                 // check whether a circle button is pressed
           if(circleButtons[i] -> isPressed(p.x, p.y)) {
             circleButtons[i] -> pressButton();
-            lastPressedCircle = i;
-            iterationsSincePrev = 1; // begin iterating after button press
             buttonPressed = circleButtons[i] -> label;
-            Serial.println(i);
           }
         }
-
-        // check whether a square button is pressed
-        for (int i = 0; i < squareButtons.size(); i++) {
+        for (int i = 0; i < squareButtons.size(); i++) {                 // check whether a square button is pressed
           if(squareButtons[i] -> isPressed(p.x, p.y)) {
             squareButtons[i] -> pressButton();
-            lastPressedSquare = i;
-            iterationsSincePrev = 1; // begin iterating after button press
             buttonPressed = squareButtons[i] -> label;
-            Serial.println(i);
           }
         }
-
-        // check whether a triangle button is pressed
-        for (int i = 0; i < triangleButtons.size(); i++) {
+        for (int i = 0; i < triangleButtons.size(); i++) {               // check whether a triangle button is pressed
           if(triangleButtons[i] -> isPressed(p.x, p.y)) {
             triangleButtons[i] -> pressButton();
-            lastPressedTriangle = i;
-            iterationsSincePrev = 1; // begin iterating after button press
-            Serial.println(i);
           }
         }
-
-       if(change -> isPressed(p.x, p.y)) {
+       if(change -> isPressed(p.x, p.y)) {                               // check whether change page button is pressed
          this -> changePage();
-         Serial.println("CHANGE");
        }
-        
-       // check if power button is pressed
-       if(power -> isPressed(p.x, p.y)){
-          for (int i=0; i < 5; i++) {
-            power -> pressButton();
-            delay(50);
-          }
-          
-          iterationsSincePrev = 1; // begin iterating after button press
-          // prevSigMillis = now; // power on requires 5 signals back to back (within ~250ms), bypass time sensitivity
+       if(power -> isPressed(p.x, p.y)){                                 // check whether power button is pressed
+          power -> pressButton();
         }
       }
     }
-    
-    prevSigMillis = now; // successful touch, update time
+    prevSigMillis = now;                                                 // successful touch, update time
   }
-
-  // only iterate if button has been pressed
-  if (iterationsSincePrev > 0) {
-    iterationsSincePrev ++;
-  }
-
   return buttonPressed;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////                         Functions for drawing the User Interface                              //////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
 /*
- *  Functions for drawing the UI
+ *  Draw the function buttons page
  */
-// Adds function buttons to the User Interface
 void UI::drawFunctionButtons() {
   
   // Clear current buttons
@@ -156,9 +100,9 @@ void UI::drawFunctionButtons() {
 
   squareButtons = {
     new SquareButton(260, 110, WHITE, RED, '>', 0x1002C2D),                                // Channel Up
-    new SquareButton(140, 110, WHITE, RED, '<', 0x1002C2D),                                // Channel Down
-    new SquareButton(200, 70, WHITE, RED, '+', 0x1002C2D),                                 // Volume Up
-    new SquareButton(200, 150, WHITE, RED, '-', 0x1002C2D),                                // Volume Down
+    new SquareButton(140, 110, WHITE, RED, '<', 0x100ACAD),                                // Channel Down
+    new SquareButton(200, 70, WHITE, RED, '+', 0x1000405),                                 // Volume Up
+    new SquareButton(200, 150, WHITE, RED, '-', 0x1008485),                                // Volume Down
     new SquareButton(200, 330, RED, WHITE, 'E', 0x1009293)                                 // Enter
   };
 
@@ -166,7 +110,7 @@ void UI::drawFunctionButtons() {
     new TriangleButton(130, 330, WHITE, RED, TriangleButton::Type::LEFT, 0x1007273),       // Left
     new TriangleButton(270, 330, WHITE, RED, TriangleButton::Type::RIGHT, 0x100f2f3),      // Right
     new TriangleButton(200, 260, WHITE, RED, TriangleButton::Type::UP, 0x1005253),         // Up
-    new TriangleButton(200, 400, WHITE, RED, TriangleButton::Type::DOWN, 0x1005253)        // Down  
+    new TriangleButton(200, 400, WHITE, RED, TriangleButton::Type::DOWN, 0x100d2d3)        // Down  
   };
   
   // Change page and redraw
@@ -175,7 +119,9 @@ void UI::drawFunctionButtons() {
 }
 
 
-// Adds numerical buttons to the User Interface
+/*
+ * Draw the numerical buttons page
+ */
 void UI::drawNumericalButtons() {
 
   // Empty the current buttons
@@ -219,7 +165,9 @@ void UI::drawNumericalButtons() {
 }
 
 
-// Draw a black screen with white edges
+/*
+ * Draw the blank screen/background
+ */
 void UI::drawBlackScreen() {
   tft.fillScreen(BLACK);
   tft.drawLine(0,0,319,0,WHITE);
@@ -229,7 +177,9 @@ void UI::drawBlackScreen() {
 }
 
 
-// Change the current page to the other page
+/*
+ * Switch which page is displayed on the User Interface
+ */
 void UI::changePage() {
   if (page == NUMERICAL) {
     drawFunctionButtons();
@@ -239,6 +189,9 @@ void UI::changePage() {
 }
 
 
+/*
+ * Draw each button onto the User Interface
+ */
 void UI::drawUI() {
   drawBlackScreen();
   for(int i = 0; i<circleButtons.size(); i++) 

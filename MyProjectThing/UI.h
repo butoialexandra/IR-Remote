@@ -11,24 +11,8 @@
 #include "buttons.h"
 
 class UI {
-  public:
-    int colourDelayIterations = 50;
-    enum Page {NUMERICAL, FUNCTIONAL};
-    Page page;
-    PowerButton *power = new PowerButton(40, 445, 0xF800, 0x07E0, 'P', 0x100BCBD);
-    ChangePageButton *change = new ChangePageButton(270, 445);
-    std::vector<CircleButton*> circleButtons;
-    std::vector<SquareButton*> squareButtons;
-    std::vector<TriangleButton*> triangleButtons;
-    UI() {
-      drawNumericalButtons();
-    }
-    void drawUI();
-    char handleTouch();
-    void drawFunctionButtons();
-    void drawNumericalButtons();
-    void drawBlackScreen();
-    void changePage();
+  protected:
+    // colour constants
     const uint16_t BLACK =   HX8357_BLACK;
     const uint16_t BLUE =    HX8357_BLUE;
     const uint16_t RED =     HX8357_RED;
@@ -37,6 +21,33 @@ class UI {
     const uint16_t MAGENTA = HX8357_MAGENTA;
     const uint16_t YELLOW =  HX8357_YELLOW;
     const uint16_t WHITE =   HX8357_WHITE;
+    
+  public:
+    // types of UI page
+    enum Page {NUMERICAL, FUNCTIONAL};
+    Page page;
+    
+    // additional buttons
+    PowerButton *power = new PowerButton(40, 445, 0xF800, 0x07E0, 'P', 0x100BCBD);
+    ChangePageButton *change = new ChangePageButton(270, 445);
+    
+    // button vectors to store each class of button for a given UI
+    std::vector<CircleButton*> circleButtons;
+    std::vector<SquareButton*> squareButtons;
+    std::vector<TriangleButton*> triangleButtons;
+    
+    // constructor
+    UI() {
+      drawNumericalButtons();
+    }
+    
+    // ui functions
+    void drawUI();
+    char handleTouch();
+    void drawFunctionButtons();
+    void drawNumericalButtons();
+    void drawBlackScreen();
+    void changePage();
 };
 
 #endif
