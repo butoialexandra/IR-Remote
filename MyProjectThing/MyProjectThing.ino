@@ -5,10 +5,9 @@
 // TestScreen::activate(true); to false to change this behaviour.
 
 #include "unphone.h"
-#include "buttons.h"
 #include "UI.h"
 #include <vector>
-#include <typeinfo>
+#include "adafruitConfig.h"
 
 // Color definitions
 #define RED      0xF800
@@ -22,10 +21,19 @@
 #define TS_MINY 100
 #define TS_MAXY 3750
 
+bool sendAdafruit = true;
 
-// declare array of digit buttons
-CircleButton *numbers [10];
 UI *pageOne;
+AdafruitIO_Feed *button0 = io.feed("0Button");
+AdafruitIO_Feed *button1 = io.feed("1Button");
+AdafruitIO_Feed *button2 = io.feed("2Button");
+AdafruitIO_Feed *button3 = io.feed("3Button");
+AdafruitIO_Feed *button4 = io.feed("4Button");
+AdafruitIO_Feed *button5 = io.feed("5Button");
+AdafruitIO_Feed *button6 = io.feed("6Button");
+AdafruitIO_Feed *button7 = io.feed("7Button");
+AdafruitIO_Feed *button8 = io.feed("8Button");
+AdafruitIO_Feed *button9 = io.feed("9Button");
 
 void setup() {
   Wire.setClock(100000); // higher rates trigger an IOExpander bug
@@ -93,10 +101,50 @@ void setup() {
   // draw 0-9 buttons
   //drawNumericalButtons();
   //drawFunctionButtons();
+  
   pageOne = new UI();
+  
+  if (sendAdafruit) {
+    // connect to io.adafruit.com
+    Serial.print("Connecting to Adafruit IO");
+    io.connect();
+  
+    // wait for a connection
+    while(io.status() < AIO_CONNECTED) {
+      Serial.print(".");
+      delay(500);
+    }
+  
+    // we are connected
+    Serial.println();
+    Serial.println(io.statusText());
+    pageOne -> colourDelayIterations = 5; // Accounting for delay to Adafruit
+  }
 }
 
+int clickCount [10] = {0}; // Counts of each numerical button being pressed, send this to Adafruit
+
+
 void loop() {
+  // Always handle button press and check power
   bool usbPowerOn = checkPowerSwitch(); // shutdown if switch off
-  pageOne -> handleTouch(); // check for touch
+  char buttonPress = pageOne -> handleTouch(); // check for touch
+  
+  // Send data to Adafruit
+  if (sendAdafruit) {
+    io.run();
+    // send analytics on number buttons to Adafruit.io
+    switch(buttonPress) {
+      case '0': clickCount[0] ++; button0 -> save(clickCount[0]); break;
+      case '1': clickCount[1] ++; button1 -> save(clickCount[1]); break;
+      case '2': clickCount[2] ++; button2 -> save(clickCount[2]); break;
+      case '3': clickCount[3] ++; button3 -> save(clickCount[3]); break;
+      case '4': clickCount[4] ++; button4 -> save(clickCount[4]); break;
+      case '5': clickCount[5] ++; button5 -> save(clickCount[5]); break;
+      case '6': clickCount[6] ++; button6 -> save(clickCount[6]); break;
+      case '7': clickCount[7] ++; button7 -> save(clickCount[7]); break;
+      case '8': clickCount[8] ++; button8 -> save(clickCount[8]); break;
+      case '9': clickCount[9] ++; button9 -> save(clickCount[9]); break;
+    }
+  }
 }

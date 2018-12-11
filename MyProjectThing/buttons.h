@@ -9,6 +9,7 @@
 #include <IRremote.h>
 #include "unphone.h"
 
+
 class Button {
   protected:
     const unsigned int PanasonicAddress = 0x4004;
@@ -21,6 +22,7 @@ class Button {
     uint16_t inactiveColour;
     uint16_t currentColour;
     void drawButton();
+    void changeHex(unsigned long h);
     void pressButton(Button);
     const uint16_t BLACK =   HX8357_BLACK;
     const uint16_t BLUE =    HX8357_BLUE;

@@ -1,5 +1,4 @@
 #include "UI.h"
-#include "unphone.h"
 
 /*
  * Variables for registering sensible touch
@@ -22,8 +21,13 @@ int SCREEN_HEIGHT = 480;
 
 
 
-
-void UI::handleTouch() {
+/*
+ * Handles touch on UI, returning the label of the button pressed
+ */
+ 
+char UI::handleTouch() {
+  char buttonPressed = ' ';
+  
   // Get the time
   now = millis();
   if(firstTime) {
@@ -33,7 +37,7 @@ void UI::handleTouch() {
   }
 
   // reset button colour after 50 iterations
-  if(iterationsSincePrev == 50) {
+  if(iterationsSincePrev == colourDelayIterations) {
     if (lastPressedCircle > -1) {                           // Handle Circle Pressed                
       circleButtons[lastPressedCircle] -> resetButton();
       lastPressedCircle = -1;                        
@@ -67,27 +71,29 @@ void UI::handleTouch() {
     // if touch has enough pressure
       if (p.z > 10 && p.z < 50) {
         
-        // check whether a number button is pressed
+        // check whether a circle button is pressed
         for (int i = 0; i < circleButtons.size(); i++) {
           if(circleButtons[i] -> isPressed(p.x, p.y)) {
             circleButtons[i] -> pressButton();
             lastPressedCircle = i;
             iterationsSincePrev = 1; // begin iterating after button press
+            buttonPressed = circleButtons[i] -> label;
             Serial.println(i);
           }
         }
 
-        // check whether a number button is pressed
+        // check whether a square button is pressed
         for (int i = 0; i < squareButtons.size(); i++) {
           if(squareButtons[i] -> isPressed(p.x, p.y)) {
             squareButtons[i] -> pressButton();
             lastPressedSquare = i;
             iterationsSincePrev = 1; // begin iterating after button press
+            buttonPressed = squareButtons[i] -> label;
             Serial.println(i);
           }
         }
 
-        // check whether a number button is pressed
+        // check whether a triangle button is pressed
         for (int i = 0; i < triangleButtons.size(); i++) {
           if(triangleButtons[i] -> isPressed(p.x, p.y)) {
             triangleButtons[i] -> pressButton();
@@ -122,6 +128,8 @@ void UI::handleTouch() {
   if (iterationsSincePrev > 0) {
     iterationsSincePrev ++;
   }
+
+  return buttonPressed;
 }
 
 

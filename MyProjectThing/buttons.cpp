@@ -1,7 +1,11 @@
 #include "buttons.h"
-#include "math.h"
 
 bool pressSuccess = false; // whether the button press has been successful
+
+
+void Button::changeHex(unsigned long h) {
+  hexCode = h;
+}
 
 void CircleButton::drawButton() {
   tft.fillCircle(xPos, yPos, radius, currentColour);
@@ -19,7 +23,6 @@ void TriangleButton::drawButton() {
     case TriangleButton::Type::RIGHT : tft.fillTriangle(xPos + width/2, yPos, xPos - width/2, yPos - height/2, xPos - width/2, yPos + height/2, currentColour); break;
     case TriangleButton::Type::UP : tft.fillTriangle(xPos - width/2, yPos + height/2, xPos, yPos - height/2, xPos + width/2, yPos + height/2, currentColour); break;
     case TriangleButton::Type::DOWN : tft.fillTriangle(xPos - width/2, yPos - height/2, xPos, yPos + height/2, xPos + width/2, yPos - height/2, currentColour); break;
-    default : tft.fillTriangle(xPos - width/2, yPos, xPos + width/2, yPos - height/2, xPos + width/2, yPos + height/2, currentColour); break;
   }
 }
 

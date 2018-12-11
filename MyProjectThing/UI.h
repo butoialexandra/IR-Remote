@@ -12,6 +12,7 @@
 
 class UI {
   public:
+    int colourDelayIterations = 50;
     enum Page {NUMERICAL, FUNCTIONAL};
     Page page;
     PowerButton *power = new PowerButton(40, 445, 0xF800, 0x07E0, 'P', 0x100BCBD);
@@ -23,7 +24,7 @@ class UI {
       drawNumericalButtons();
     }
     void drawUI();
-    void handleTouch();
+    char handleTouch();
     void drawFunctionButtons();
     void drawNumericalButtons();
     void drawBlackScreen();
