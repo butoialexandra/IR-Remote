@@ -10,10 +10,13 @@ The main interaction with the device will be via touch screen, we will therefore
 
 ```python
 if screen touched:
-	while button touched:
-		send button IR code to TV
-		change colour
-		increment button count on Adafruit
+	get touch coordinates;
+	if touch coordinates inside a button:
+		button = touched;
+		while button touched:
+			send buttons IR code to TV
+			change colour
+			increment button count on Adafruit
 
 ```
 
