@@ -69,13 +69,9 @@ Below is a class diagram for our GUI.
 
 After implementing the basic functionality of a normal TV remote (the ability to send IR codes to a TV and a GUI), we decided to give the users the ability to gain insights about the remote's usage (e.g. which buttons are used most frequently). Thus, we created a dashboard using Adafruit IO which displays how many times each button has been pressed. As Adafruit IO allows at most 10 free feeds at a time, we could implement this feature only for the 10 numerical buttons (digits 0-9). A screenshot of the dashboard is provided below.
 
-![Adafruit Analytics](images/analytics.png)
-
 ## Getting input from Adafruit.io
 
 Another useful feature of our remote is the ability to control the TV from the distance. In order to achieve this, we created a dashboard on Adafruit IO that allows the user to press any numerical button and the coresponding button on the remote will be pressed as well. 
-
-![Adafruit Controller](images/controller.png)
 
 ## Over-the-air(OTA) Updates
 In order to ensure that the firmware of the remote stays constantly up to date, we gave the users the possibility to update it over-the-air. This is a much more efficient and convenient way to both fix bugs and add new features than connecting the remote to a PC and manually updating the firmware. Every time the remote is rebooted, it checks for a new firmware available and it performs an update in case one is found. This could be improved by giving the users the ability to choose whether to update the firmware or not. However, as the OTA updates were not the main purpose of this project and we already implemented this feature for the previous project, we did not implement this again. As we understand the security risks involved, we chose to deliver the updates using a fairly secure protocol, HTTP. 
@@ -83,7 +79,12 @@ In order to ensure that the firmware of the remote stays constantly up to date, 
 # Finished Product
 ## The TV Remote
 ## The analytics on Adafruit.io
+
+![Adafruit Analytics](images/analytics.png)
+
 ## The virtual controller on Adafruit.io
+
+![Adafruit Controller](images/controller.png)
 
 # Testing
 To ensure our solution is secure and robust, we manually tested as much functionality as possible. The only part missing is the OTA update, which we couldn't test since the server storing the bin files is no longer live. However, we still appreciate the importance of including OTA functionality, ensuring that an automatic update is possible. The tests are detailed below:
