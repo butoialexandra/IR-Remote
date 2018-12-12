@@ -3,10 +3,10 @@
 
 #define IO_USERNAME     "AndrewC19"
 #define IO_KEY          "a9f2b43f5dae4f7cb29f849229a78fe5"
-#define WIFI_SSID       "uos-other"
-#define WIFI_PASS       "shefotherkey05"
-//#define WIFI_SSID       "BTHub6-SJ7N"
-//#define WIFI_PASS       "6NbCepn7uGHX"
+//#define WIFI_SSID       "uos-other"
+//#define WIFI_PASS       "shefotherkey05"
+#define WIFI_SSID       "BTHub6-SJ7N"
+#define WIFI_PASS       "6NbCepn7uGHX"
 
 #define CONTROLLER_USERNAME      "alexandrabutoi"
 #define CONTROLLER_KEY           "fe914302f62d4b588a0371d062378897"

@@ -14,12 +14,20 @@ if screen touched:
 	if touch coordinates inside a button:
 		button = touched;
 		while button touched:
-			send buttons IR code to TV
-			change colour
-			increment button count on Adafruit
+			send buttons IR code to TV;
+			change colour;
+			increment button count on Adafruit;
 
 ```
-
+The design criteria is summerised as follows:
+|     Criteria         |     Reason                |
+|:--------------------:|:-------------------------:|
+| Object-oriented design | TV controller is a hierarchy of objects |
+| Produce analytics | To give some useful usage stats, make device more fun |
+| Allow for control from distance | Adds extra useful functionality and something different |
+| Clear GUI | Make the device friendly and intuitive to use |
+| Security | Need OTA updating incase of bugs/security flaws |
+ 
 # Development Process
 == Getting IR codes due to broken controller
 == Transmitting IR codes via Serial Input
