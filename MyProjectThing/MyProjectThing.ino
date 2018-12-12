@@ -4,10 +4,21 @@
 // modules, and allow stepping through tests via the touch screen. Change the 
 // TestScreen::activate(true); to false to change this behaviour.
 
+
+#include <WebServer.h> // simple webserver
+#include "HTTPClient.h"  // ESP32 library for making HTTP requests
+#include <Update.h>       // OTA update library
 #include "unphone.h"
 #include "UI.h"
 #include <vector>
 #include "adafruitConfig.h"
+
+// OTA Stuff
+int doCloudGet(HTTPClient *, String, String); // helper for downloading 'ware
+void doOTAUpdate();                           // main OTA logic
+int currentVersion = 1;
+String gitID = "AndrewC19";
+bool otaUpdate = false;
 
 // Color definitions
 #define RED      0xF800
@@ -38,18 +49,6 @@ AdafruitIO_Feed *buttonFeeds [10] = {io.feed("0Button"),
                                     io.feed("9Button")
                                    };
                                
-  
-            
-//AdafruitIO_Feed *button0 = io.feed("0Button");
-//AdafruitIO_Feed *button1 = io.feed("1Button");
-//AdafruitIO_Feed *button2 = io.feed("2Button");
-//AdafruitIO_Feed *button3 = io.feed("3Button");
-//AdafruitIO_Feed *button4 = io.feed("4Button");
-//AdafruitIO_Feed *button5 = io.feed("5Button");
-//AdafruitIO_Feed *button6 = io.feed("6Button");
-//AdafruitIO_Feed *button7 = io.feed("7Button");
-//AdafruitIO_Feed *button8 = io.feed("8Button");
-//AdafruitIO_Feed *button9 = io.feed("9Button");
 
 // Array storing number of clicks for each numerical button 0 - 9
 int clickCount [10];
@@ -119,9 +118,9 @@ void setup() {
   
   ui = new UI();
   
-  if (sendAdafruit) {
+  if (sendAdafruit || otaUpdate) {
     // connect to io.adafruit.com
-    Serial.print("Connecting to Adafruit IO");
+    Serial.print("Connecting to internet");
     io.connect();
   
     // wait for a connection
@@ -129,7 +128,10 @@ void setup() {
       Serial.print(".");
       delay(500);
     }
-  
+
+    if (otaUpdate)
+      doOTAUpdate();
+    
     // we are connected
     Serial.println();
     Serial.println(io.statusText());
@@ -176,3 +178,89 @@ void resetClickCount() {
   }
 }
 
+
+// OTA over-the-air update stuff ///////////////////////////////////////////
+void doOTAUpdate() {             // the main OTA logic
+  // materials for doing an HTTP GET on github from the BinFiles/ dir
+  HTTPClient http; // manage the HTTP request process
+  int respCode;    // the response code from the request (e.g. 404, 200, ...)
+  int highestAvailableVersion = -1;  // version of latest firmware on server
+
+  // do a GET to read the version file from the cloud
+  Serial.println("checking for firmware updates...");
+  respCode = doCloudGet(&http, gitID, "version");
+  if(respCode == 200) // check response code (-ve on failure)
+    highestAvailableVersion = atoi(http.getString().c_str());
+  else
+    Serial.printf("couldn't get version! rtn code: %d\n", respCode);
+  http.end(); // free resources
+
+  // do we know the latest version, and does the firmware need updating?
+  if(respCode != 200) {
+    Serial.printf("cannot update\n\n");
+    return;
+  } else if(currentVersion >= highestAvailableVersion) {
+    Serial.printf("firmware is up to date\n\n");
+    return;
+  }
+
+  // ok, we need to do a firmware update...
+  Serial.printf(
+    "upgrading firmware from version %d to version %d\n",
+    currentVersion, highestAvailableVersion
+  );
+
+  // do a GET for the .bin
+  String binName = String(highestAvailableVersion);
+  binName += ".bin";
+  respCode = doCloudGet(&http, gitID, binName);
+  int updateLength = http.getSize(); // if isn't big enough refuse to update
+  if(respCode == 200) {              // check response code (-ve on failure)
+    Serial.printf(".bin code/size: %d; %d\n\n", respCode, updateLength);
+    if(updateLength < 174992) {      // the size of the Blink example sketch
+      Serial.println("update size is too small! refusing to try OTA update");
+      return;
+    }
+  } else {
+    Serial.printf("failed to get a .bin! return code is: %d\n", respCode);
+    http.end(); // free resources
+    return;
+  }
+
+  // write the new version of the firmware to flash
+  WiFiClient stream = http.getStream();
+  if(Update.begin(updateLength)) {
+    Serial.printf("starting OTA may take a minute or two...\n");
+    Update.writeStream(stream);
+    if(Update.end()) {
+      Serial.printf("update done, now finishing...\n");
+      if(Update.isFinished()) {
+        Serial.printf("update successfully finished; rebooting...\n\n");
+        ESP.restart();
+      } else {
+        Serial.printf("update didn't finish correctly :(\n");
+      }
+    } else {
+      Serial.printf("an update error occurred, #: %d\n" + Update.getError());
+    }
+  } else {
+    Serial.printf("not enough space to start OTA update :(\n");
+  }
+  stream.flush();
+}
+
+
+// helper for downloading from cloud firmware server via HTTP GET
+int doCloudGet(HTTPClient *http, String gitID, String fileName) {
+  // build up URL from components; for example:
+  // http://com3505.gate.ac.uk/repos/com3505-labs-2018-adalovelace/BinFiles/2.bin
+  String baseUrl =
+    "http://com3505.gate.ac.uk/repos/";
+  String url =
+    baseUrl + "com3505-labs-2018-" + gitID + "/BinFiles/" + fileName;
+
+  // make GET request and return the response code
+  http->begin(url);
+  http->addHeader("User-Agent", "ESP32");
+  return http->GET();
+}
