@@ -109,6 +109,7 @@ To ensure our solution is secure and robust, we manually tested as much function
 # Conclusion
 ## Things to improve
 
+There are several things that need further improvements. We could send to Adafruit analytics about the usage of each of the buttons of our remote, as well as let the user control all the buttons remotely (from teh Adafruit dashboard), not only the numerical ones. As sending analytics to Adafruit reduces significantly the responsiveness of the remote, a user should be able to disable this function whenever they don't want to it. This could be done by adding another button to the GUI that lets the user enable/disable this feature. In addition, we could improve the process of performing OTA updates by giving the user the possibility to choose when/whether to update or not and by using a more secure protocol like HTTPS. 
 
 ## What was done well
 ## How it is useful in IoT
