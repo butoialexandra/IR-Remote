@@ -15,6 +15,12 @@ IR Remote
 # Finished Product
 
 # Testing
+| Situation                   | Result           | Comment  |
+| --------------------------- |:----------------:| --------:|
+| Pressing Number Button      | right-aligned    | $1600    |
+| Pressing Circle Button      | centered         |   $12    |
+| Pressing Square Button      | are neat         |    $1    |
+| Pressing Change Page Button |                  |          |
 
 # Conclusion
 == Things to improve
