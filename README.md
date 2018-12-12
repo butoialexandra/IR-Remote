@@ -2,10 +2,20 @@
 For this project, an IoT-styled TV Controller has been designed and implemented. The focus throughout development has been to create a useful, fun and internet connected device that stands out from your usual TV Remote to offer fun extra features that may even be useful. In particular, we aim to make use and demonstrate our knowledge of the IoT by producing a device that best utilises the hardware available, providing as much network connectivity as possible whilst maintaining security. The main motivation for selecting this project is that I have a TV without a working remote, and would like to be able to retune and use this TV again!
 
 # Design Criteria
-The TV remote design can be split into two distinct parts. Firstly, the remote itself should be fully functional and do everything you expect a regular remote to do. Secondly, it should be as IoT driven as possible - i.e. not just a TV remote, but a remote that clearly demonstrates IoT-styled functionality. In particular, we want the remote to be highly network connected. Ideally, the solution would allow for input via a platform such as Adafruit or IFTTT such that a user could control the device from a distance. As a result, the remote could be placed permanently facing the TV so that if left on, you could just log in to the platform and turn it off. Also, it would be nice to use a platform to record and analyse usage - for example, which channel and I visiting most frequently? Such a design could be extended to provide more interesting analytics.
+The TV remote design can be split into two distinct parts. Firstly, the remote itself should be fully functional and do everything you expect a regular remote to do. Secondly, it should be as IoT driven as possible - i.e. not just a TV remote, but a remote that clearly demonstrates IoT-styled functionality. In particular, we want the remote to be highly network connected. Ideally, the solution would allow for input via a platform such as Adafruit or IFTTT such that a user could control the device from a distance. As a result, the remote could be placed permanently facing the TV so that if left on, you could just log in to the platform and turn it off. Also, it would be nice to use a platform to record and analyse usage - for example, which channel do I visit most frequently? Such a design could be extended to provide more interesting and insightful analytics.
 
 In terms of the code, an effective solution would clearly be object-oriented. A TV controller can easily be divided into a series of objects, behaviours and relationships; thus, making sense to structure the code in the same fashion. We aim to use good C++ practice, making use of header files etc. and object-oriented features to get as much power out of the solution as possible.
 
+The main interaction with the device will be via touch screen, we will therefore design the solution around this and add the platform driven functionality later, which will emulate a touch screen interaction. The algorithm for handling a touch (and therefore any interaction with the device) is as follows:
+
+```python
+if screen touched:
+	while button touched:
+		send button IR code to TV
+		change colour
+		increment button count on Adafruit
+
+```
 
 # Development Process
 == Getting IR codes due to broken controller
