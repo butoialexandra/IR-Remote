@@ -69,6 +69,8 @@ Below is a class diagram for our GUI.
 
 After implementing the basic functionality of a normal TV remote (the ability to send IR codes to a TV and a GUI), we decided to give the users the ability to gain insights about the remote's usage (e.g. which buttons are used most frequently). Thus, we created a dashboard using Adafruit IO which displays how many times each button has been pressed. As Adafruit IO allows at most 10 free feeds at a time, we could implement this feature only for the 10 numerical buttons (digits 0-9). A screenshot of the dashboard is provided below.
 
+![Adafruit Analytics](images/analytics.png)
+
 ## Getting input from Adafruit.io
 
 Another useful feature of our remote is the ability to control the TV from the distance. In order to achieve this, we created a dashboard on Adafruit IO that allows the user to press any numerical button and the coresponding button on the remote will be pressed as well. 
@@ -109,7 +111,7 @@ To ensure our solution is secure and robust, we manually tested as much function
 # Conclusion
 ## Things to improve
 
-There are several things that need further improvements. We could send to Adafruit analytics about the usage of each of the buttons of our remote, as well as let the user control all the buttons remotely (from teh Adafruit dashboard), not only the numerical ones. As sending analytics to Adafruit reduces significantly the responsiveness of the remote, a user should be able to disable this function whenever they don't want to it. This could be done by adding another button to the GUI that lets the user enable/disable this feature. In addition, we could improve the process of performing OTA updates by giving the user the possibility to choose when/whether to update or not and by using a more secure protocol like HTTPS. 
+There are several things that need further improvements. We could send to Adafruit analytics about the usage of each of the buttons of our remote, as well as let the user control all the buttons remotely (from the Adafruit dashboard), not only the numerical ones. As sending analytics to Adafruit reduces significantly the responsiveness of the remote, a user should be able to disable this function whenever they don't want to use it. This could be done by adding another button to the GUI that lets the user enable/disable this feature. In addition, we could improve the process of performing OTA updates by giving the user the possibility to choose when/whether to update or not and by using a more secure protocol like HTTPS. 
 
 ## What was done well
 ## How it is useful in IoT
