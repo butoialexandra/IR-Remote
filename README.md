@@ -69,6 +69,8 @@ Below is a class diagram for our GUI.
 
 ## Getting input from Adafruit.io
 
+A useful feature of our remote is the ability to control the TV from the distance. In order to achieve this, we created a dashboard on Adafruit IO that allows the user to press any numerical button and the coresponding button on the remote will be pressed as well. 
+
 ![Adafruit Controller](images/controller.png)
 
 ## Over-the-air(OTA) Updates
