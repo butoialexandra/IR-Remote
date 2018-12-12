@@ -33,9 +33,11 @@ bool otaUpdate = false;
 #define TS_MAXY 3750
 
 bool sendAdafruit = false;
+bool receiveAdafruit = true;
 
 UI *ui;
 
+AdafruitIO_Feed *controllerFeed = controller.feed("tvremote");
 // Adafruit feeds for each button, storing the frequency of button presses
 AdafruitIO_Feed *buttonFeeds [10] = {io.feed("0Button"),
                                     io.feed("1Button"),
@@ -118,24 +120,36 @@ void setup() {
   
   ui = new UI();
   
-  if (sendAdafruit || otaUpdate) {
-    // connect to io.adafruit.com
+  if (sendAdafruit || receiveAdafruit || otaUpdate) { // connect to internet
+    
+    // If recording touches to adafruit
     Serial.print("Connecting to internet");
-    io.connect();
-  
-    // wait for a connection
-    while(io.status() < AIO_CONNECTED) {
-      Serial.print(".");
-      delay(500);
+    if (sendAdafruit) {
+      io.connect(); // connect to io
+      while(io.status() < AIO_CONNECTED) {
+        Serial.print(".");
+        delay(500);
+      }
+      Serial.println();
+      Serial.println(io.statusText());
+      resetClickCount(); // clear the click count
     }
 
+    // If getting controller input from adafruit  
+    if (receiveAdafruit) {
+      controller.connect(); // connect to controller
+      controllerFeed->onMessage(handleMessage); // check for Adafruit controller input
+      while(controller.status() < AIO_CONNECTED) {
+        Serial.print(".");
+        delay(500);
+      }
+      Serial.println();
+      Serial.println(controller.statusText());
+    }
+
+    // If doing OTA update
     if (otaUpdate)
       doOTAUpdate();
-    
-    // we are connected
-    Serial.println();
-    Serial.println(io.statusText());
-    resetClickCount(); // clear the click count
   }
 }
 
@@ -148,6 +162,7 @@ void loop() {
   // Send data to Adafruit
   if (sendAdafruit) {
     io.run();
+    
     // send analytics on number buttons to Adafruit.io
 
     if (isdigit(buttonPress)) {
@@ -155,18 +170,10 @@ void loop() {
       clickCount[buttonNumber] ++;
       buttonFeeds[buttonNumber] -> save(clickCount[buttonNumber]);
     }
-//    switch(buttonPress) {
-//      case '0': clickCount[0] ++; button0 -> save(clickCount[0]); break;
-//      case '1': clickCount[1] ++; button1 -> save(clickCount[1]); break;
-//      case '2': clickCount[2] ++; button2 -> save(clickCount[2]); break;
-//      case '3': clickCount[3] ++; button3 -> save(clickCount[3]); break;
-//      case '4': clickCount[4] ++; button4 -> save(clickCount[4]); break;
-//      case '5': clickCount[5] ++; button5 -> save(clickCount[5]); break;
-//      case '6': clickCount[6] ++; button6 -> save(clickCount[6]); break;
-//      case '7': clickCount[7] ++; button7 -> save(clickCount[7]); break;
-//      case '8': clickCount[8] ++; button8 -> save(clickCount[8]); break;
-//      case '9': clickCount[9] ++; button9 -> save(clickCount[9]); break;
-//    }
+  }
+
+  if (receiveAdafruit) {
+    controller.run();
   }
 }
 
@@ -263,4 +270,12 @@ int doCloudGet(HTTPClient *http, String gitID, String fileName) {
   http->begin(url);
   http->addHeader("User-Agent", "ESP32");
   return http->GET();
+}
+
+
+void handleMessage(AdafruitIO_Data *data) {
+  Serial.print("received <- ");
+  if (isdigit(data->value()[0]))                // checks if the value is a digit
+    ui -> virtualButtonPress(data -> toInt());  // if so, convert to int and press corresponding button
+  Serial.println(data -> value());
 }

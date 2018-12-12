@@ -205,3 +205,12 @@ void UI::drawUI() {
   change -> drawButton();
 }
 
+void UI::virtualButtonPress(int n) {
+  // change page if not on numerical page
+  if (page != NUMERICAL) {
+    changePage();
+  }
+  
+  circleButtons[n] -> pressButton();
+}
+

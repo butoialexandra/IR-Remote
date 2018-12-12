@@ -48,6 +48,7 @@ class UI {
     void drawNumericalButtons();
     void drawBlackScreen();
     void changePage();
+    void virtualButtonPress(int n);
 };
 
 #endif
