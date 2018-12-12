@@ -33,7 +33,7 @@ bool otaUpdate = false;
 #define TS_MAXY 3750
 
 bool sendAdafruit = false;
-bool receiveAdafruit = true;
+bool receiveAdafruit = false;
 
 UI *ui;
 

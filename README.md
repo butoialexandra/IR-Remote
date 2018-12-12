@@ -78,6 +78,10 @@ In order to ensure that the firmware of the remote stays constantly up to date, 
 
 # Finished Product
 ## The TV Remote
+
+![Digit buttons](images/digits.jpeg)
+![Function buttons](images/functions.jpeg)
+
 ## The analytics on Adafruit.io
 
 ![Adafruit Analytics](images/analytics.png)
