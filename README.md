@@ -97,6 +97,6 @@ To ensure our solution is secure and robust, we manually tested as much function
 
 
 # Conclusion
-== Things to improve
-== What was done well
-== How it is useful in IoT
+## Things to improve
+## What was done well
+## How it is useful in IoT
