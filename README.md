@@ -66,7 +66,8 @@ Alex do this
 
 ## Getting input from Adafruit.io
 
-
+## Over-the-air(OTA) Updates
+In order to ensure that the firmware of the remote stays constantly up to date, we gave the users the possibility to update it over-the-air. This is a much more efficient and convenient way to both fix bugs and add new features than connecting the remote to a PC and manually updating the firmware. Every time the remote is rebooted, it checks for a new firmware available and it performs an update in case one is found. This could be improved by giving the users the ability to choose whether to update the firmware or not. However, as the OTA updates were not the main purpose of this project and we already implemented this feature for the previous project, we did not implement this again. As we understand the security risks involved, we chose to deliver the updates using a fairly secure protocol, HTTP. 
 
 # Finished Product
 ## The TV Remote
@@ -98,5 +99,7 @@ To ensure our solution is secure and robust, we manually tested as much function
 
 # Conclusion
 ## Things to improve
+
+
 ## What was done well
 ## How it is useful in IoT
