@@ -37,7 +37,7 @@ The design criteria is summerised as follows:
 ## Finding IR Codes
 Since the controller for my Panasonic TV was broken, finding the IR codes for my TV was a difficult challenge. I began by searching the Arduino forums, and managed to find one hex code for the power button for my TV. Aside from this, I was able to find the hex codes for number buttons 0 - 9 on a Russian Arduino forum after a few hours of searching, luckily defined as P1 - P9, as I couldn't understand anything else. My aim was to replace my broken remote, so I needed to find the function buttons, however they were no where to be found. I did manage to find a load of Panasonic Pronto Codes, that look like this:
 
-```python
+```
 0000 0071 0000 0032 0080 003F 0010 0010 0010 0030 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010
 0010 0010 0010 0010 0010 0010 0010 0010 0010 0030 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010
 0010 0010 0010 0010 0010 0030 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010
