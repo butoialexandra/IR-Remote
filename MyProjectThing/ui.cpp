@@ -95,7 +95,8 @@ void UI::drawFunctionButtons() {
     new CircleButton(50, 50, WHITE, RED, 'M', 0x1004C4D),                                  // Mute
     new CircleButton(50, 115, WHITE, RED, 'T', 0x100ECED),                                 // Tune
     new CircleButton(50, 245, WHITE, RED, 'B', 0x1002B2A),                                 // Back
-    new CircleButton(50, 180, WHITE, RED, 'S', 0x100A0A1)                                  // Source
+    new CircleButton(50, 180, WHITE, RED, 'S', 0x100A0A1),                                 // Source
+    new CircleButton(50, 310, WHITE, RED, 'G', 0x100A0A1)                                  // Guide
     };
 
   squareButtons = {
