@@ -21,6 +21,8 @@ if screen touched:
 ```
 The design criteria is summerised as follows:
 
+<center>
+
 |     Criteria         |     Reason                |
 |:--------------------:|:-------------------------:|
 | Object-oriented design | TV controller is a hierarchy of objects |
@@ -28,6 +30,8 @@ The design criteria is summerised as follows:
 | Allow for control from distance | Adds extra useful functionality and something different |
 | Clear GUI | Make the device friendly and intuitive to use |
 | Security | Need OTA updating incase of bugs/security flaws |
+
+</center>
 
 # Development Process
 == Getting IR codes due to broken controller
