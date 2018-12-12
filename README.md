@@ -57,7 +57,7 @@ I found a programme called IrScrutinizer (http://www.harctoolbox.org/IrScrutiniz
 With this knowledge, I was able to get full functionality for my TV without using a remote. Just the list of Pronto Codes and IrScrutinizer.
 
 ## Sending IR Codes
-With the IR codes, the next stage was to successfully send them to the TV and record the behaviour. To do this, we used IRSend from the IRremote library. IRSend contained a prewritten panasonic protocol, which requires the panasonic address (0x4004) and the hex code for the button pressed. We implemented a simple sketch that would read input from the Serial Monitor in the Arduino IDE and send a matching hex code (e.g. send hex code for 1 when 1 is input). This was generally successful, however, we found that we couldn't turn the TV on even though the TV was receiving the IR signal (as the LED on the TV would blink when IR blasted). After playing with some values, we realised that the TV would only turn on if the button was held, and therefore we repreated the IR blast 5 times over 250 ms to simulate this. Consequently, we could turn the TV on/off successfully.
+With the IR codes, the next stage was to successfully send them to the TV and record the behaviour. To do this, we used IRSend from the IRremote library. IRSend contained a prewritten panasonic protocol, which requires the panasonic address (0x4004) and the hex code for the button pressed. We implemented a simple sketch that would read input from the Serial Monitor in the Arduino IDE and send a matching hex code (e.g. send hex code for 1 when 1 is input). This was generally successful, however, we found that we couldn't turn the TV on even though the TV was receiving the IR signal (as the LED on the TV would blink when IR blasted). After playing with some values, we realised that the TV would only turn on if the button was held, and therefore we repeated the IR blast 5 times over 250 ms to simulate this. Consequently, we could turn the TV on/off successfully.
 
 ## Building the GUI
 Alex do this
@@ -69,6 +69,9 @@ Alex do this
 
 
 # Finished Product
+## The TV Remote
+## The analytics on Adafruit.io
+## The virtual controller on Adafruit.io
 
 # Testing
 To ensure our solution is secure and robust, we manually tested as much functionality as possible. The only part missing is the OTA update, which we couldn't test since the server storing the bin files is no longer live. However, we still appreciate the importance of including OTA functionality, ensuring that an automatic update is possible. The tests are detailed below:
