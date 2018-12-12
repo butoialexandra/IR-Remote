@@ -17,15 +17,12 @@ IR Remote
 # Testing
 | Situation                   | Comment                                    							 |  Result  |
 | --------------------------- |:--------------------------------------------------------------------:| --------:|
-| Pressing Number Button      | Sends corresponding number to TV            						 | $1600    |
+| Pressing Number Button      | Sends corresponding number to TV            						  | $1600    |
 | Pressing Circle Button      | Sends corresponding function to TV         			  				 |   $12    |
 | Pressing Square Button      | Sends corresponding function to TV         							 |    $1    |
 | Pressing Change Page Button | Changes page on remote                 							     |          |
 | Pressing Triangle Button    | Sends corresponding function to TV                                   |          |
-| Pressing Power Button       | Initially wouldn't switch TV on,							         |          |
-|							  | made the remote repeatedly send the signal                           |          |
-|						      | for half a second to simulate holding;                               |          |
-|							  |	now turns TV on and off.                                             |          |
+| Pressing Power Button       | Initially wouldn't switch TV on, made the remote repeatedly send the signal for half a second to simulate holding; now turns TV on and off. | Success |	
 | Holding Number Button       | Sends corresponding number to TV as long as held                     |          |
 | Holding Circle Button       | Sends corresponding function to TV as long as held                   |          |
 | Holding Square Button       | Sends corresponding function to TV as long as held                   |          |
