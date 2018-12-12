@@ -1,5 +1,9 @@
 # IR-Remote
-IR Remote
+For this project, an IoT-styled TV Controller has been designed and implemented. The focus throughout development has been to create a useful, fun and internet connected device that stands out from your usual TV Remote to offer fun extra features that may even be useful. In particular, we aim to make use and demonstrate our knowledge of the IoT by producing a device that best utilises the hardware available, providing as much network connectivity as possible whilst maintaining security. The main motivation for selecting this project is that I have a TV without a working remote, and would like to be able to retune and use this TV again!
+
+
+
+in designing the device. making use of low cost hardware (where possible), tackling security issues, producing useful analytics and making it as network driven as possible - i.e. not just a TV remote, a network connected tv remot
 
 # Contents
 
