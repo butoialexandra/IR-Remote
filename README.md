@@ -67,9 +67,11 @@ Below is a class diagram for our GUI.
 
 ## Sending analytics to Adafruit.io
 
+After implementing the basic functionality of a normal TV remote (the ability to send IR codes to a TV and a GUI), we decided to give the users the ability to gain insights about the remote's usage (e.g. which buttons are used most frequently). Thus, we created a dashboard using Adafruit IO which displays how many times each button has been pressed. As Adafruit IO allows at most 10 free feeds at a time, we could implement this feature only for the 10 numerical buttons (digits 0-9). A screenshot of the dashboard is provided below.
+
 ## Getting input from Adafruit.io
 
-A useful feature of our remote is the ability to control the TV from the distance. In order to achieve this, we created a dashboard on Adafruit IO that allows the user to press any numerical button and the coresponding button on the remote will be pressed as well. 
+Another useful feature of our remote is the ability to control the TV from the distance. In order to achieve this, we created a dashboard on Adafruit IO that allows the user to press any numerical button and the coresponding button on the remote will be pressed as well. 
 
 ![Adafruit Controller](images/controller.png)
 
