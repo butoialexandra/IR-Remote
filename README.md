@@ -34,15 +34,43 @@ The design criteria is summerised as follows:
 </center>
 
 # Development Process
-== Getting IR codes due to broken controller
-== Transmitting IR codes via Serial Input
-== Building a GUI
-== Processing input from GUI into Adafruit.io
-== Receiving input into GUI from Adafruit.io
+## Finding IR Codes
+Since the controller for my Panasonic TV was broken, finding the IR codes for my TV was a difficult challenge. I began by searching the Arduino forums, and managed to find one hex code for the power button for my TV. Aside from this, I was able to find the hex codes for number buttons 0 - 9 on a Russian Arduino forum after a few hours of searching, luckily defined as P1 - P9, as I couldn't understand anything else. My aim was to replace my broken remote, so I needed to find the function buttons, however they were no where to be found. I did manage to find a load of Panasonic Pronto Codes, that look like this:
+
+```python
+0000 0071 0000 0032 0080 003F 0010 0010 0010 0030 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010
+0010 0010 0010 0010 0010 0010 0010 0010 0010 0030 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010
+0010 0010 0010 0010 0010 0030 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010 0010
+0010 0030 0010 0030 0010 0030 0010 0030 0010 0030 0010 0010 0010 0010 0010 0010 0010 0030 0010 0030 0010 0030 0010 0030
+0010 0030 0010 0010 0010 0030 0010 0A98
+```
+I found a programme called IrScrutinizer (http://www.harctoolbox.org/IrScrutinizer.html), that allowed me to convert better understand this Pronto Code. I used the programme to 'Scruitinize' this code, which gave me three values; D, S and F. D corresponds to the device id, S the sub-device id and F the function id.
+
+0x1004C4D is an example panasonic hex code. The D value always gives 10 and the sub device value (for my device) is always 0. Together this gives 0x100 (the 0x is always prefixed), however the last 4 digits are missing. The inverted F value gives the 4C, however, there is no documentation for how to get the last 2 digits, leaving us with 0x1004C. Fortunately, I managed to spot a pattern in the hex codes for my device. The last 2 digits are always a copy of the previous pair of digits, but where the second of the pair is incremented by 1 (either numerically or alphabetically). For example:
+
+0x1004C --> 0x1004C4D
+0x10052 --> 0x1005253
+0x1002C --> 0x1002C2D
+
+With this knowledge, I was able to get full functionality for my TV without using a remote. Just the list of Pronto Codes and IrScrutinizer.
+
+## Sending IR Codes
+With the IR codes, the next stage was to successfully send them to the TV and record the behaviour. To do this, we used IRSend from the IRremote library. IRSend contained a prewritten panasonic protocol, which requires the panasonic address (0x4004) and the hex code for the button pressed. We implemented a simple sketch that would read input from the Serial Monitor in the Arduino IDE and send a matching hex code (e.g. send hex code for 1 when 1 is input). This was generally successful, however, we found that we couldn't turn the TV on even though the TV was receiving the IR signal (as the LED on the TV would blink when IR blasted). After playing with some values, we realised that the TV would only turn on if the button was held, and therefore we repreated the IR blast 5 times over 250 ms to simulate this. Consequently, we could turn the TV on/off successfully.
+
+## Building the GUI
+Alex do this
+
+## Sending analytics to Adafruit.io
+
+## Getting input from Adafruit.io
+
+
 
 # Finished Product
 
 # Testing
+To ensure our solution is secure and robust, we manually tested as much functionality as possible. The only part missing is the OTA update, which we couldn't test since the server storing the bin files is no longer live. However, we still appreciate the importance of including OTA functionality, ensuring that an automatic update is possible. The tests are detailed below:
+
 | Situation                   | Comment                                    							 |  Result  |
 | --------------------------- |:--------------------------------------------------------------------:|:--------:|
 | Pressing Number Button      | Sends corresponding number to TV            						 | Success  |
