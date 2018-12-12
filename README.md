@@ -44,12 +44,14 @@ Since the controller for my Panasonic TV was broken, finding the IR codes for my
 0010 0030 0010 0030 0010 0030 0010 0030 0010 0030 0010 0010 0010 0010 0010 0010 0010 0030 0010 0030 0010 0030 0010 0030
 0010 0030 0010 0010 0010 0030 0010 0A98
 ```
-I found a programme called IrScrutinizer (http://www.harctoolbox.org/IrScrutinizer.html), that allowed me to convert better understand this Pronto Code. I used the programme to 'Scruitinize' this code, which gave me three values; D, S and F. D corresponds to the device id, S the sub-device id and F the function id.
+I found a programme called IrScrutinizer (http://www.harctoolbox.org/IrScrutinizer.html), that allowed me to better understand this Pronto Code. I used the programme to 'Scruitinize' this code, which gave me three values; D, S and F. D corresponds to the device id, S the sub-device id and F the function id.
 
 0x1004C4D is an example panasonic hex code. The D value always gives 10 and the sub device value (for my device) is always 0. Together this gives 0x100 (the 0x is always prefixed), however the last 4 digits are missing. The inverted F value gives the 4C, however, there is no documentation for how to get the last 2 digits, leaving us with 0x1004C. Fortunately, I managed to spot a pattern in the hex codes for my device. The last 2 digits are always a copy of the previous pair of digits, but where the second of the pair is incremented by 1 (either numerically or alphabetically). For example:
 
 0x1004C --> 0x1004C4D
+
 0x10052 --> 0x1005253
+
 0x1002C --> 0x1002C2D
 
 With this knowledge, I was able to get full functionality for my TV without using a remote. Just the list of Pronto Codes and IrScrutinizer.
